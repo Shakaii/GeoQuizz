@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
+import geoquizz.backoffice.entity.Photo;
 import geoquizz.backoffice.entity.Serie;
 import geoquizz.backoffice.exception.NotFound;
 
@@ -82,5 +83,16 @@ public class SerieRepresentation {
         return new ResponseEntity<>(serie, responseHeaders, HttpStatus.CREATED);
     }
 
+    @PostMapping("/{id}/photos")
+    public ResponseEntity<?> ajoutPhotos(@PathVariable("id") String id,
+                                         @RequestBody Photo photo) throws NotFound {
+        return sr.findById(id)
+                .map(serie -> {
+                    photo.setId(UUID.randomUUID().toString());
+                    photo.setSerie(serie);
+                    pr.save(photo);
+                    return new ResponseEntity<>(photo, HttpStatus.CREATED);
+                }).orElseThrow ( () -> new NotFound("Serie inexistante"));
+    }
 
 }
