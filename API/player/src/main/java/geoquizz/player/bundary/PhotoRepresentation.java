@@ -1,6 +1,5 @@
 package geoquizz.player.bundary;
 
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import geoquizz.player.entity.Serie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,25 +13,16 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(value = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
-public class SerieRepresentation {
+public class PhotoRepresentation {
 
     private SerieResource sr;
 
-    public SerieRepresentation(SerieResource sr) {
+    public PhotoRepresentation(SerieResource sr) {
         this.sr = sr;
     }
 
-    @GetMapping(value = "/serie")
+    @GetMapping(value = "/pho")
     public ResponseEntity<?> getTest() {
         return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/serie")
-    public ResponseEntity<?> postSerie(@RequestBody Serie s) {
-        s.setId(UUID.randomUUID().toString());
-        Serie saved = sr.save(s);
-        HttpHeaders rH = new HttpHeaders();
-        rH.setLocation(linkTo(SerieRepresentation.class).slash(saved.getId()).toUri());
-        return new ResponseEntity<>(saved, rH, HttpStatus.CREATED);
     }
 }

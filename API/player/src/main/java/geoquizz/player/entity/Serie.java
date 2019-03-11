@@ -26,6 +26,10 @@ public class Serie {
     @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Partie> parties;
 
+    public Serie() {
+
+    }
+
     public Serie(String ville, int dist) {
         this.ville = ville;
         this.dist = dist;
