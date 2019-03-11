@@ -2,21 +2,28 @@ package geoquizz.backoffice.bundary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import geoquizz.backoffice.entity.Serie;
+import geoquizz.backoffice.exception.NotFound;
 
 @RestController
 @RequestMapping(value="/series", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -56,5 +63,24 @@ public class SerieRepresentation {
             return new Resource<>(serie, selfLink);
         }
     }
+
+    @GetMapping(value = "/{serieId}")
+    public ResponseEntity<?> getOne(@PathVariable("serieId") String id)
+            throws NotFound {
+        return Optional.ofNullable(sr.findById(id))
+                .filter(Optional::isPresent)
+                .map(serie -> new ResponseEntity<>(serieToResource(serie.get(),false), HttpStatus.OK))
+                .orElseThrow(() -> new NotFound("Serie inexsitante"));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> postMethod(@RequestBody Serie serie) {
+        serie.setId(UUID.randomUUID().toString());
+        Serie saved = sr.save(serie);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setLocation(linkTo(SerieRepresentation.class).slash(saved.getId()).toUri());
+        return new ResponseEntity<>(serie, responseHeaders, HttpStatus.CREATED);
+    }
+
 
 }
