@@ -18,7 +18,7 @@ public class Partie {
     @JoinColumn(name = "serie_id", nullable = false)
     private Serie serie;
 
-    @OneToMany(mappedBy = "partie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "parties")
     private Set<Photo> photos;
 
 

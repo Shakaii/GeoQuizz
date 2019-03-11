@@ -1,6 +1,7 @@
 package geoquizz.player.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Photo {
@@ -16,11 +17,13 @@ public class Photo {
     @JoinColumn(name = "serie_id", nullable = false)
     private Serie serie;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "partie_id", nullable = false)
-    private Partie partie;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "partie_photo",
+            joinColumns = @JoinColumn(name = "photo_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "partie_id", referencedColumnName = "id"))
+    private Set<Partie> parties;
 
-    public Photo() {
+    public Photo(String desc, String url, int x, int y) {
 
     }
 
