@@ -20,9 +20,4 @@ public class PhotoRepresentation {
     public PhotoRepresentation(SerieResource sr) {
         this.sr = sr;
     }
-
-    @GetMapping(value = "/pho")
-    public ResponseEntity<?> getTest() {
-        return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
-    }
 }

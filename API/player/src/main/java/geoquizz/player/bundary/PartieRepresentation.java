@@ -31,11 +31,6 @@ public class PartieRepresentation {
         return new ResponseEntity<>(pr.findById(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/photos")
-    public ResponseEntity<?> getPhotos(@PathVariable("id") String id) {
-        return new ResponseEntity<>(pr.findById(id).get().getPhotos(), HttpStatus.OK);
-    }
-
     @PostMapping(value = "/new")
     public ResponseEntity<?> postSerie(@RequestBody Partie p, @RequestParam(value = "serie", required = true) String id) {
         if (sr.findById(id).isPresent()) {
