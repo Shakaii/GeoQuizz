@@ -1,4 +1,4 @@
-package geoquizz.backoffice.bundary;
+package geoquizz.player.bundary;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -7,20 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.*;
-
 @RestController
-@RequestMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TestRepresentation {
+@RequestMapping(value = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
+public class SerieRepresentation {
 
-    private TestResource tr;
+    private SerieResource sr;
 
-    public TestRepresentation(TestResource tr) {
-        this.tr = tr;
+    public SerieRepresentation(SerieResource sr) {
+        this.sr = sr;
     }
 
-    @GetMapping
+    @GetMapping(value = "/serie")
     public ResponseEntity<?> getTest() {
-        return new ResponseEntity<>(tr.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
     }
 }
