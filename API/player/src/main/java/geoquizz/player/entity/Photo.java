@@ -1,5 +1,7 @@
 package geoquizz.player.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -8,10 +10,10 @@ public class Photo {
 
     @Id
     private String id;
-    private String desc;
+    private String dsc;
     private String url;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "serie_id", nullable = false)
@@ -25,8 +27,8 @@ public class Photo {
 
     public Photo() { }
 
-    public Photo(String desc, String url, int x, int y) {
-        this.desc = desc;
+    public Photo(String dsc, String url, double x, double y) {
+        this.dsc = dsc;
         this.url = url;
         this.x = x;
         this.y = y;
@@ -40,12 +42,12 @@ public class Photo {
         this.id = id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDsc() {
+        return dsc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDsc(String dsc) {
+        this.dsc = dsc;
     }
 
     public String getUrl() {
@@ -56,19 +58,19 @@ public class Photo {
         this.url = url;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
