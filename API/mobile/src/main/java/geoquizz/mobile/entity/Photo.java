@@ -17,6 +17,10 @@ public class Photo {
     @JoinColumn(name = "serie_id", nullable = false)
     private Serie serie;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Photo() { }
 
     public Photo(String desc, String url, int x, int y) {
@@ -72,5 +76,9 @@ public class Photo {
 
     public void setSerie(Serie serie) {
         this.serie = serie;
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }
