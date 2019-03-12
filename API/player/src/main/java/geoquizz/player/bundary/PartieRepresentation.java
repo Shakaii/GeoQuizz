@@ -1,6 +1,7 @@
 package geoquizz.player.bundary;
 
 import geoquizz.player.entity.Partie;
+import geoquizz.player.entity.Photo;
 import geoquizz.player.entity.Serie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ public class PartieRepresentation {
     private PartieResource pr;
 
     @Autowired SerieResource sr;
+    @Autowired PhotoResource poR;
 
     public PartieRepresentation(PartieResource pr) {
         this.pr = pr;
@@ -39,6 +41,13 @@ public class PartieRepresentation {
             Serie s = sr.findById(id).get();
             p.setId(UUID.randomUUID().toString());
             p.setSerie(s);
+            for (Photo po : s.getPhotos()) {
+                po.addParties(p);
+                //p.setPhotos(s.getPhotos());
+                //poR.save(po);
+            }
+            p.setPhotos(s.getPhotos());
+            //p.setPhotos();
             Partie saved = pr.save(p);
             HttpHeaders rH = new HttpHeaders();
             rH.setLocation(linkTo(PartieRepresentation.class).slash(saved.getId()).toUri());

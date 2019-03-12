@@ -17,12 +17,14 @@ public class Photo {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "serie_id", nullable = false)
+    @JsonIgnore
     private Serie serie;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "partie_photo",
             joinColumns = @JoinColumn(name = "photo_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "partie_id", referencedColumnName = "id"))
+    @JsonIgnore
     private Set<Partie> parties;
 
     public Photo() { }
@@ -80,5 +82,9 @@ public class Photo {
 
     public void setSerie(Serie serie) {
         this.serie = serie;
+    }
+
+    public void addParties(Partie p) {
+        this.parties.add(p);
     }
 }
