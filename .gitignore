@@ -375,9 +375,6 @@ GitHub.sublime-settings
 # TODO: where does this rule come from?
 docs/_book
 
-# TODO: where does this rule come from?
-test/
-
 ### Vuejs ###
 node_modules
 
