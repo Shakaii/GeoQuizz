@@ -81,7 +81,7 @@ public class SerieRepresentation {
         Serie saved = sr.save(serie);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(linkTo(SerieRepresentation.class).slash("series").slash(saved.getId()).toUri());
-        return new ResponseEntity<>(serie, responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(saved, responseHeaders, HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/series/{id}/photos")
