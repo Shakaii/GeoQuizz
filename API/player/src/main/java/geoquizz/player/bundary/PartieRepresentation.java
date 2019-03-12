@@ -27,7 +27,9 @@ public class PartieRepresentation {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getGame(@PathVariable("id") String id) {
-        pr.findById(id).get().setStatus(1);
+        Partie p = pr.findById(id).get();
+        p.setStatus(1);
+        pr.save(p);
         return new ResponseEntity<>(pr.findById(id), HttpStatus.OK);
     }
 
