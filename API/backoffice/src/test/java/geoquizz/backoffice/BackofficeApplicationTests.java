@@ -1,6 +1,7 @@
 package geoquizz.backoffice;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
