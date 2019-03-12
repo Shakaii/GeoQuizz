@@ -60,6 +60,7 @@ public class PartieRepresentation {
 
     @PutMapping(value = "/result")
     public ResponseEntity<?> putGame(@RequestBody Partie p) {
+        pr.save(p);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
