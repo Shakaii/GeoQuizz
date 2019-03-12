@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ import geoquizz.backoffice.entity.Serie;
 import geoquizz.backoffice.exception.NotFound;
 
 @RestController
-@RequestMapping(value="/series", produces=MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="/office", produces=MediaType.APPLICATION_JSON_VALUE)
 @ExposesResourceFor(Serie.class)
 public class SerieRepresentation {
 
@@ -39,7 +40,7 @@ public class SerieRepresentation {
         this.pr=pr;
     }
 
-    @GetMapping
+    @GetMapping(value = "/series")
     public ResponseEntity<?> getAllSeries(){
         Iterable<Serie> allSeries = sr.findAll();
         return new ResponseEntity<>(serie2Resource(allSeries),HttpStatus.OK);
@@ -65,7 +66,7 @@ public class SerieRepresentation {
         }
     }
 
-    @GetMapping(value = "/{serieId}")
+    @GetMapping(value = "/series/{serieId}")
     public ResponseEntity<?> getOne(@PathVariable("serieId") String id)
             throws NotFound {
         return Optional.ofNullable(sr.findById(id))
@@ -74,16 +75,16 @@ public class SerieRepresentation {
                 .orElseThrow(() -> new NotFound("Serie inexsitante"));
     }
 
-    @PostMapping
+    @PostMapping(value = "/series")
     public ResponseEntity<?> postMethod(@RequestBody Serie serie) {
         serie.setId(UUID.randomUUID().toString());
         Serie saved = sr.save(serie);
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(linkTo(SerieRepresentation.class).slash(saved.getId()).toUri());
+        responseHeaders.setLocation(linkTo(SerieRepresentation.class).slash("series").slash(saved.getId()).toUri());
         return new ResponseEntity<>(serie, responseHeaders, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/photos")
+    @PostMapping(value = "/series/{id}/photos")
     public ResponseEntity<?> ajoutPhotos(@PathVariable("id") String id,
                                          @RequestBody Photo photo) throws NotFound {
         return sr.findById(id)
@@ -93,6 +94,17 @@ public class SerieRepresentation {
                     pr.save(photo);
                     return new ResponseEntity<>(photo, HttpStatus.CREATED);
                 }).orElseThrow ( () -> new NotFound("Serie inexistante"));
+    }
+
+    @PutMapping(value = "/series/{id}/params")
+    public ResponseEntity<?> changeParamsSerie(@PathVariable("id") String id,
+                                               @RequestBody int dist) throws NotFound {
+        return sr.findById(id)
+                .map(serie -> {
+                    serie.setDist(dist);
+                    sr.save(serie);
+                    return new ResponseEntity<>(serie.getDist(), HttpStatus.CREATED);
+                }).orElseThrow( () -> new NotFound("Serie inexistante"));
     }
 
 }

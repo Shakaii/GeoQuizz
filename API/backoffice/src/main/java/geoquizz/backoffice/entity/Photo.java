@@ -23,8 +23,15 @@ public class Photo {
             inverseJoinColumns = @JoinColumn(name = "partie_id", referencedColumnName = "id"))
     private Set<Partie> parties;
 
-    public Photo(String desc, String url, int x, int y) {
+    public Photo() {
+        
+    }
 
+    public Photo(String desc, String url, int x, int y) {
+        this.desc=desc;
+        this.url=url;
+        this.x=x;
+        this.y=y;
     }
 
     public String getId() {
