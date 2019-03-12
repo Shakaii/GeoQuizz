@@ -36,7 +36,7 @@ public class PartieRepresentation {
     }
 
     @PostMapping(value = "/new")
-    public ResponseEntity<?> postSerie(@RequestBody Partie p, @RequestParam(value = "serie", required = true) String id) {
+    public ResponseEntity<?> postGame(@RequestBody Partie p, @RequestParam(value = "serie", required = true) String id) {
         if (sr.findById(id).isPresent()) {
             Serie s = sr.findById(id).get();
             p.setId(UUID.randomUUID().toString());
@@ -56,5 +56,10 @@ public class PartieRepresentation {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @PutMapping(value = "/result")
+    public ResponseEntity<?> putGame(@RequestBody Partie p) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
