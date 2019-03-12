@@ -13,11 +13,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(value = "/mobile", produces = MediaType.APPLICATION_JSON_VALUE)
-public class PhotoRepresentation {
+public class UserRepresentation {
 
-    private SerieResource sr;
+    private UserResource sr;
 
-    public PhotoRepresentation(SerieResource sr) {
+    public UserRepresentation(UserResource sr) {
         this.sr = sr;
     }
 }
