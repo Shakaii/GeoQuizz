@@ -55,7 +55,7 @@ public class SerieRepresentation {
     }
 
     private Resource<Serie> serieToResource(Serie serie, Boolean collection) {
-        Link selfLink = linkTo(SerieRepresentation.class)
+        Link selfLink = linkTo(SerieRepresentation.class).slash("series")
             .slash(serie.getId())
             .withSelfRel();
         if(collection){
@@ -69,10 +69,17 @@ public class SerieRepresentation {
     @GetMapping(value = "/series/{serieId}")
     public ResponseEntity<?> getOne(@PathVariable("serieId") String id)
             throws NotFound {
+        /*
         return Optional.ofNullable(sr.findById(id))
                 .filter(Optional::isPresent)
                 .map(serie -> new ResponseEntity<>(serieToResource(serie.get(),false), HttpStatus.OK))
                 .orElseThrow(() -> new NotFound("Serie inexsitante"));
+                */
+
+        Optional o = sr.findById(id);
+        if (o.isPresent()) {
+            return new ResponseEntity<>(o.get(), HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "/series")
