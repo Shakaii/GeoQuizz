@@ -1,5 +1,7 @@
 package geoquizz.backoffice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class Photo {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "serie_id", nullable = false)
+    @JsonIgnore
     private Serie serie;
 
     @ManyToMany(fetch = FetchType.LAZY)
