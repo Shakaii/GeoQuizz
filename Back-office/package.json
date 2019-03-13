@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.5",
+    "filepond": "^4.2.0",
     "vue": "^2.6.6",
     "vue-axios": "^2.1.4",
     "vue-filepond": "^5.0.0",
