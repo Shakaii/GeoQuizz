@@ -1,6 +1,5 @@
 package geoquizz.player.bundary;
 
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import geoquizz.player.entity.Photo;
 import geoquizz.player.entity.Serie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.PrimitiveIterator;
 import java.util.UUID;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
