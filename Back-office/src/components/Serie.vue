@@ -1,12 +1,11 @@
 <template>
-        <el-button>
+        <el-button size="mini" @click="callRetrieve">
             <h1>{{name}}</h1>
             <img src="../assets/logo.png">
         </el-button>
 </template>
 
 <script>
-import Serie from './Serie.vue'
 
 export default {
   name: 'serie',
@@ -16,15 +15,13 @@ export default {
       }
   },
   props: {
-    name
+    name: String,
+    fn: Function,
+    id: String
   },
   methods: {
-      retrieveSeries() {
-          this.axios.get('http://localhost:8081/office/series')
-          .then((response) => {
-              console.log(response)
-              this.series = response.data._embedded.series
-          })
+      callRetrieve() {
+          this.fn(this.id)
       }
   }
 }
