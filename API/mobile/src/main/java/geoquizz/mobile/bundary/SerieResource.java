@@ -1,8 +1,8 @@
 package geoquizz.mobile.bundary;
 
-import geoquizz.mobile.entity.Test;
+import geoquizz.mobile.entity.Serie;
 import org.springframework.data.repository.CrudRepository;
 
-public interface TestResource extends CrudRepository<Test, String> {
+public interface SerieResource extends CrudRepository<Serie, String> {
     //ecrire ici les methods perso (findBy...)
 }
