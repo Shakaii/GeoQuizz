@@ -1,8 +1,9 @@
 <template>
     <html>
-        <head><meta charset="UTF-8"> 
-                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
-
+        <head>
+            <title>GeoQuizz</title>
+            <meta charset="UTF-8"> 
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         </head>
         <body>
             <div class="mapAndPictureContainer" v-if="state == 'demo' || state == 'inGame'">
@@ -15,9 +16,29 @@
                 </l-map>
             </div>
             
-            <div class="center" id="texte">
-                {{texte}} <br> {{texte2}}
+            <div class="center" id="texte" v-if="texte">
+                {{texte}} <br v-if="texte2"> {{texte2}}
             </div>
+
+            <div class="difficultyContainer" v-if="state == 'chosingSerie'">
+                <el-card v-bind:shadow="button1">
+                    <el-button @click="difficulty = 0; button1= 'always'; button2= 'hover'; button3='hover'" >Parisien</el-button>
+                    <br><br>
+                    Vous partez en vacance tous les ans au même endroit.
+                </el-card>
+                <el-card v-bind:shadow="button2">
+                    <el-button @click="difficulty = 1; button2= 'always'; button1= 'hover'; button3='hover'" >Touriste</el-button>
+                    <br><br>
+                    Vous vous arrêtez à chaques station service pour admirer la carte de la région.
+                </el-card>
+                <el-card v-bind:shadow="button3">
+                    <el-button @click="difficulty = 2; button3= 'always'; button2= 'hover'; button1='hover'" >Guide du routard</el-button>
+                    <br><br>
+                    Vous avez laissé des avis sur la page google de tous les restaurants.
+                </el-card>
+            </div>
+
+
             <div class="center">
                 <el-button @click="showSeries" >Commencer une série</el-button> 
             </div>
@@ -54,7 +75,11 @@
                 map: null,
                 circles : [] ,
                 texte: "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.",
-                texte2: "Essaye donc!" 
+                texte2: "Essaye donc!",
+                difficulty: 0,
+                button1: 'always',
+                button2: 'hover',
+                button3: 'hover'
             }
         },
 
@@ -80,7 +105,6 @@
                         fillColor: "#5bc0de",
                         opacity: 0.8
                     });
-
                     this.found = true;
                 }
                 else if (!this.found){
@@ -97,6 +121,13 @@
 
           },
 
+          showSeries: function(){
+              this.state = "chosingSerie"
+              this.texte = "Choisissez une série et une difficultée pour commencer!"
+              this.texte2 = ""
+              
+          }
+
 
 
         },
@@ -105,6 +136,7 @@
 </script>
 
 <style>
+
     body{
         margin : 0;
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
@@ -126,6 +158,19 @@
         width: 100vw;
     }
 
+    .difficultyContainer{
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items : center;
+        text-align: center;
+    }
+
+    .el-card{
+      max-width: 20vw;
+      margin: 1em;
+    }
+
     #img{
         width: 50%;
     }
@@ -145,4 +190,6 @@
         text-align:center;
         font-size: 1.5em;
     }
+
+
 </style>
