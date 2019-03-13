@@ -5,6 +5,9 @@ import './plugins/element.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
  
+// Import styles
+import 'filepond/dist/filepond.min.css';
+
 Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
