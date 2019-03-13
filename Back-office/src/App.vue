@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <Series></Series>
     <div>
       <p>
         If Element is successfully added to this project, you'll see an
@@ -15,11 +16,13 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import Series from './components/Series.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    HelloWorld,
+    Series
   }
 }
 </script>
