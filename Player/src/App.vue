@@ -16,23 +16,25 @@
                 </l-map>
             </div>
             
+            <Series v-on:serieId="selectSerieId" class="h" v-if="state== 'chosingSerie'"></Series>
+
             <div class="center" id="texte" v-if="texte">
                 {{texte}} <br v-if="texte2"> {{texte2}}
             </div>
 
             <div class="difficultyContainer" v-if="state == 'chosingSerie'">
                 <el-card v-bind:shadow="button1">
-                    <el-button @click="difficulty = 0; button1= 'always'; button2= 'hover'; button3='hover'" >Parisien</el-button>
+                    <el-button type="primary" plain @click="difficulty = 0; button1= 'always'; button2= 'hover'; button3='hover'" >Parisien</el-button>
                     <br><br>
                     Vous partez en vacance tous les ans au même endroit.
                 </el-card>
                 <el-card v-bind:shadow="button2">
-                    <el-button @click="difficulty = 1; button2= 'always'; button1= 'hover'; button3='hover'" >Touriste</el-button>
+                    <el-button type="primary" plain @click="difficulty = 1; button2= 'always'; button1= 'hover'; button3='hover'" >Touriste</el-button>
                     <br><br>
                     Vous vous arrêtez à chaques station service pour admirer la carte de la région.
                 </el-card>
                 <el-card v-bind:shadow="button3">
-                    <el-button @click="difficulty = 2; button3= 'always'; button2= 'hover'; button1='hover'" >Guide du routard</el-button>
+                    <el-button type="primary" plain @click="difficulty = 2; button3= 'always'; button2= 'hover'; button1='hover'" >Guide du routard</el-button>
                     <br><br>
                     Vous avez laissé des avis sur la page google de tous les restaurants.
                 </el-card>
@@ -40,23 +42,26 @@
 
 
             <div class="center">
-                <el-button @click="showSeries" >Commencer une série</el-button> 
+                <el-button type="primary" plain v-if="state == 'demo'" @click="showSeries" >Choisir une série</el-button> 
+                <el-button type="primary" plain v-if="state == 'chosingSerie'" @click="startGame" >Commencer la série</el-button> 
             </div>
         </body>
     </html>
 </template>
 
 <script>
-    import * as Vue2Leaflet from 'vue2-leaflet' 
+    import * as Vue2Leaflet from 'vue2-leaflet';
     import { LMap, LTileLayer, LMarker, LCircle} from 'vue2-leaflet';
+    import Series from './components/Series.vue';
     
     export default {
-        name:"GeoQuizz",
+        name:"Geoquizz",
         components: {
             LMap,
             LTileLayer,
             LMarker,
-            LCircle
+            LCircle,
+            Series
         },
 
         data(){
@@ -79,7 +84,9 @@
                 difficulty: 0,
                 button1: 'always',
                 button2: 'hover',
-                button3: 'hover'
+                button3: 'hover',
+                series: undefined,
+                selectedSerie: ""
             }
         },
 
@@ -124,13 +131,18 @@
           showSeries: function(){
               this.state = "chosingSerie"
               this.texte = "Choisissez une série et une difficultée pour commencer!"
-              this.texte2 = ""
-              
+              this.texte2 = ""   
+          },
+
+          startGame: function(){
+            this.state = "inGame"
+          },
+
+          selectSerieId(id){
+            this.selectedSerieId = id;
           }
 
-
-
-        },
+        }
         
     }
 </script>
