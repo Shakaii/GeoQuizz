@@ -30,9 +30,10 @@ public class Serie {
 
     }
 
-    public Serie(String ville, int dist) {
+    public Serie(String ville, int dist, String map_refs) {
         this.ville = ville;
         this.dist = dist;
+        this.map_refs = map_refs;
     }
 
     public String getId() {
