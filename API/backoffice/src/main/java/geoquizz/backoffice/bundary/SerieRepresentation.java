@@ -26,8 +26,10 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import geoquizz.backoffice.entity.Photo;
 import geoquizz.backoffice.entity.Serie;
 import geoquizz.backoffice.exception.NotFound;
+import io.swagger.annotations.Api;
 
 @RestController
+@Api( description="Gére les routes liées aux séries sur le back office.")
 @RequestMapping(value="/office", produces=MediaType.APPLICATION_JSON_VALUE)
 @ExposesResourceFor(Serie.class)
 public class SerieRepresentation {
