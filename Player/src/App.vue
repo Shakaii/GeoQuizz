@@ -45,6 +45,7 @@
             </div>
             <div class="center" v-if="state == 'demo'">
                 <el-button type="primary" plain  @click="showSeries" >Choisir une série</el-button> 
+                <el-button type="primary" v-if="gameSaved" plain  @click="getSave" >Reprendre la partie sauvegardée</el-button> 
             </div>
 
             <div v-if="state == 'inGame'" class="gameInterface">
@@ -54,12 +55,15 @@
                     High-Score de la série : 0 / {{maxScore}}
                 </div>
                 <div class="timerAndText">
-                    <el-progress v-if="!resultTexte" type="circle" :percentage="(time * 100) / 20" :color="color" status="text">{{time}}</el-progress>
+                    <el-progress v-if="!resultTexte" type="circle" :percentage="(time * 100) / 60" :color="color" status="text">{{time}}</el-progress>
                     {{resultTexte}}
                 </div>
 
                 <!-- {{serieName}} ( zone {{currentPictureIndex}} / {{photos.length}} )<br> -->
-                <el-button type="primary" plain @click="nextPicture">Zone suivante</el-button>
+                <div>
+                    <el-button type="primary" plain @click="nextPicture">Zone suivante</el-button>
+                    <el-button type="primary" plain @click="save">Sauvegarder</el-button>
+                </div>
             </div>
 
         </body>
@@ -115,14 +119,21 @@
                 serieName: "",
                 resultTexte: "",
                 multiplier: 0,
-                time: 0,
+                time: 60,
                 interval: "",
-                color: "#67C23A"
+                color: "#67C23A",
+                gameSaved: false
+            }
+        },
+        mounted(){
+            if(localStorage.getItem('save')){
+                this.gameSaved = true;
             }
         },
 
         methods:{
 
+            //deals with clicks on the map when the app is in demo state
             demoClick: function(e) {
 
                 this.compteur ++
@@ -169,6 +180,7 @@
               }
           },
 
+          //deal with the on click event of the map when the game is started
           inGameClick: function(e){
 
               let lat = e.latlng.lat
@@ -250,6 +262,7 @@
 
           },
 
+          //change the state of the game for chosing Serie and difficulty
           showSeries: function(){
               this.state = "chosingSerie"
               this.texte = "Choisissez une série et une difficultée pour commencer!"
@@ -287,7 +300,7 @@
               this.nextPicture();
           },
 
-          //kinda recursive
+          //switch to the next picture and set the interval for time gestion
           nextPicture: function(){
               if (this.photos[this.currentPictureIndex]){
                   this.circles = [];
@@ -295,7 +308,7 @@
                   this.pictureCoordonates = this.photos[this.currentPictureIndex].pos;
                   this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
                   this.currentPictureIndex ++;
-                  this.time = 20;
+                  this.time = 60;
                   this.multiplier = 4;
                   this.resultTexte = "";
                   this.color = "#67C23A"
@@ -305,11 +318,11 @@
                       if ($this.time > 0){
                           $this.time --;
                       }
-                      if ($this.time == 15){
+                      if ($this.time == 40){
                         $this.multiplier = 2;
                         $this.color = "orange"
                       }
-                      else if ($this.time == 10){
+                      else if ($this.time == 20){
                         $this.multiplier = 1;
                         $this.color = "#F56C6C"
                       }
@@ -324,19 +337,85 @@
               }
           },
 
-          selectSerieId(id){
+          //receive the emitted serie id
+          selectSerieId: function(id){
             this.selectedSerie = id;
           },
 
-          endGameSignal(){
+          //save the data needed to resume a game later
+          save: function(){
+            let save = JSON.stringify({
+                state: this.state,
+                tileProvider: this.tileProvider,
+                circles : this.circles ,
+                texte: "",
+                texte2: "",
+                difficulty: this.difficulty,
+                selectedSerie: this.selectedSerie,
+                username: this.username,
+                photos: this.photos,
+                currentPicture: this.currentPicture,
+                currentPictureIndex: this.currentPictureIndex,
+                pictureCoordonates : this.pictureCoordonates,
+                score: this.score,
+                maxScore: this.maxScore,
+                maxCurrentScore: this.maxCurrentScore,
+                token: this.token,
+                serieName: this.serieName,
+                resultTexte: this.resultTexte,
+                multiplier: this.multiplier,
+                time: this.time,
+                interval: this.interval,
+                color: this.color,
+                gameSaved: this.gameSaved,
+                distanceD: this.distanceD
+            });
+
+            localStorage.setItem('save', save);
+            alert("partie sauvegardée");
+          },
+
+          //get the local stored data and resume the interval if its needed 
+          getSave: function(){
+            let $this = this;
+            let save = localStorage.getItem('save');
+            let dataArray = Object.entries(JSON.parse(save))
+            for(let dataArrayIndex = 0; dataArrayIndex < dataArray.length;dataArrayIndex ++){
+                $this[dataArray[dataArrayIndex][0]] = dataArray[dataArrayIndex][1];
+            }
+            if(this.time > 0 && !this.resultTexte){
+                this.interval = setInterval(function(){
+                      if ($this.time > 0){
+                          $this.time --;
+                      }
+                      if ($this.time == 40){
+                        $this.multiplier = 2;
+                        $this.color = "orange"
+                      }
+                      else if ($this.time == 20){
+                        $this.multiplier = 1;
+                        $this.color = "#F56C6C"
+                      }
+                      else if ($this.time == 0){
+                        $this.multiplier = 0;
+                      }
+
+                  }, 1000);
+            }
+
+          },
+
+          //send the endgame signal to the api and remove the saved game
+          endGameSignal: function(){  
+
+              localStorage.removeItem("save");
               let $this = this;
               this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
               {
                   score: $this.score,
               })
               .then((response) => {
-                console.log("partie sauvegardée")
-              });
+                console.log("partie finie et envoyée au serveur");
               });
           }
 
