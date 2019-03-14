@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import geoquizz.player.bundary.PartieResource;
-import geoquizz.player.bundary.PhotoResource;
 import geoquizz.player.bundary.SerieResource;
 import geoquizz.player.entity.Partie;
 import geoquizz.player.entity.Serie;
@@ -35,9 +34,6 @@ public class PlayerApplicationTests {
 
 	@Autowired
 	private SerieResource sr;
-
-	@Autowired
-	private PhotoResource poR;
 
 	@Autowired
 	private TestRestTemplate restTemplate;

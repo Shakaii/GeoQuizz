@@ -3,6 +3,9 @@ package geoquizz.player.bundary;
 import geoquizz.player.entity.Partie;
 import geoquizz.player.entity.Photo;
 import geoquizz.player.entity.Serie;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,17 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
+@Api( description="Gére les routes liées aux parties pour le côté player.")
 @RequestMapping(value = "/game", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PartieRepresentation {
 
@@ -34,6 +35,7 @@ public class PartieRepresentation {
         this.pr = pr;
     }
 
+    @ApiOperation(value = "Récupère la partie dont l'id est spécifiée dans la route. Change le status de la partie.")
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getGame(@PathVariable("id") String id) {
         Partie p = pr.findById(id).get();
@@ -42,6 +44,7 @@ public class PartieRepresentation {
         return new ResponseEntity<>(pr.findById(id), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Permet de créer une nouvelle partie (présente dans le body de la requête). Demande en paramètre l'id de la série. Si la série a plus de 10 photos, en sélectionne 10 aléatoirements à ajouter à la partie.")
     @PostMapping(value = "/new")
     public ResponseEntity<?> postGame(@RequestBody Partie p, @RequestParam(value = "serie", required = true) String id) {
         if (sr.findById(id).isPresent()) {
@@ -86,6 +89,7 @@ public class PartieRepresentation {
         }
     }
 
+    @ApiOperation(value = "Permet de signaler la fin de la partie. Renvoie un 204.")
     @PutMapping(value = "/result")
     public ResponseEntity<?> putGame(@RequestBody Partie p) {
         pr.save(p);
