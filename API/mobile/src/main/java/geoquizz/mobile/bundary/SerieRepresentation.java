@@ -3,6 +3,7 @@ package geoquizz.mobile.bundary;
 import geoquizz.mobile.entity.Photo;
 import geoquizz.mobile.entity.Serie;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,11 +30,13 @@ public class SerieRepresentation {
         this.sr = sr;
     }
 
+    @ApiOperation(value = "Récupère toutes les séries")
     @GetMapping(value = "/serie")
     public ResponseEntity<?> getTest() {
         return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Crée l série envoyée dans le body et la renvoie")
     @PostMapping(value = "/serie")
     public ResponseEntity<?> postSerie(@RequestBody Serie s) {
         s.setId(UUID.randomUUID().toString());
@@ -43,6 +46,7 @@ public class SerieRepresentation {
         return new ResponseEntity<>(saved, rH, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Permet d'ajouter la photo (présente dans le body de la requête) à la série dont l'id est renseignée.")
     @PostMapping(value = "/serie/{id}/photos")
     public ResponseEntity<?> postPhotos(@RequestBody Photo[] photos, @PathVariable("id") String id) {
         Serie s = sr.findById(id).get();

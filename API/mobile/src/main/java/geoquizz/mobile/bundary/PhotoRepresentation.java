@@ -3,6 +3,7 @@ package geoquizz.mobile.bundary;
 import geoquizz.mobile.entity.Photo;
 import geoquizz.mobile.entity.User;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ public class PhotoRepresentation {
         this.ur = ur;
     }
 
+    @ApiOperation(value = "Enregistre les photos d'un tableau de photos (présent dans le body)")
     @PostMapping(value = "/photos")
     public ResponseEntity<?> postPhotos(@RequestBody Photo[] photos, String token) {
         for (Photo photo : photos) {

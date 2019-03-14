@@ -2,6 +2,7 @@ package geoquizz.mobile.bundary;
 
 import geoquizz.mobile.entity.User;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class UserRepresentation {
         this.sr = sr;
     }
 
+    @ApiOperation(value = "Permet d'enrgistrer l'utilisateur (présent dans le body de la requête). Renvoie l'utilisateur créé.")
     @PostMapping(value = "/register")
     public ResponseEntity<?> postRegister(@RequestBody User user) {
 
@@ -30,13 +32,14 @@ public class UserRepresentation {
             user.setId(UUID.randomUUID().toString());
             User saved = sr.save(user);
             HttpHeaders rH = new HttpHeaders();
-            return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(saved,rH, HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>("This username is already taken", HttpStatus.CONFLICT);
         }
     }
 
+    @ApiOperation(value = "Permet de connecter l'utilisateur (présent dans le body de la requête). Renvoie le token de l'utilisateur.")
     @PostMapping(value = "/login")
     public ResponseEntity<?> postLogin(@RequestBody User user) {
 
