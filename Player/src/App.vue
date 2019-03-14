@@ -48,12 +48,17 @@
             </div>
 
             <div v-if="state == 'inGame'" class="gameInterface">
-                {{resultTexte}}<br>
-                Votre Score : {{score}} / {{maxCurrentScore}}<br>
-                High-Score de la série : 0 / {{maxScore}}<br>
-                Multiplicateur : {{multiplier}}<br>
-                {{time}} secondes restantes<br>
-                {{serieName}} ( zone {{currentPictureIndex}} / {{photos.length}} )<br>
+                
+                <div class="score">
+                    Votre Score : {{score}} / {{maxCurrentScore}}<br>
+                    High-Score de la série : 0 / {{maxScore}}
+                </div>
+                <div class="timerAndText">
+                    <el-progress v-if="!resultTexte" type="circle" :percentage="(time * 100) / 20" :color="color" status="text">{{time}}</el-progress>
+                    {{resultTexte}}
+                </div>
+
+                <!-- {{serieName}} ( zone {{currentPictureIndex}} / {{photos.length}} )<br> -->
                 <el-button type="primary" plain @click="nextPicture">Zone suivante</el-button>
             </div>
 
@@ -111,7 +116,8 @@
                 resultTexte: "",
                 multiplier: 0,
                 time: 0,
-                interval: ""
+                interval: "",
+                color: "#67C23A"
             }
         },
 
@@ -292,16 +298,20 @@
                   this.time = 20;
                   this.multiplier = 4;
                   this.resultTexte = "";
+                  this.color = "#67C23A"
                   let $this = this;
+                  clearInterval(this.interval);
                   this.interval = setInterval(function(){
                       if ($this.time > 0){
                           $this.time --;
                       }
                       if ($this.time == 15){
                         $this.multiplier = 2;
+                        $this.color = "orange"
                       }
                       else if ($this.time == 10){
                         $this.multiplier = 1;
+                        $this.color = "#F56C6C"
                       }
                       else if ($this.time == 0){
                         $this.multiplier = 0;
@@ -319,7 +329,15 @@
           },
 
           endGameSignal(){
-
+              let $this = this;
+              this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
+              {
+                  score: $this.score,
+              })
+              .then((response) => {
+                console.log("partie sauvegardée")
+              });
+              });
           }
 
         }
@@ -344,7 +362,7 @@
 
     .vue2leaflet-map{
         height:400px;        
-        width:50%;
+        width:60%;
     }
 
     .mapAndPictureContainer{
@@ -370,7 +388,7 @@
     }
 
     #img{
-        width: 50%;
+        width: 40%;
     }
 
     #img img{
@@ -387,6 +405,16 @@
         padding: 1em;
         text-align:center;
         font-size: 1.5em;
+    }
+
+    .gameInterface{
+      margin-top: 1em;
+      text-align: center;
+      display:flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+
     }
 
 
