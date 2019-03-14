@@ -5,6 +5,18 @@
             <meta charset="UTF-8"> 
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         </head>
+        <el-header>
+                  <div v-if="state != 'inGame'">
+                      GeoQuizz
+                  </div>
+                  <div class="header-left" v-if="state=='inGame'">
+                    {{serieName}} ( photo {{currentPictureIndex}} / {{photos.length}} )<br>
+                  </div>
+                  <div class="header-right" v-if="state == 'inGame'">
+                    <el-button type="primary" plain @click="save">Sauvegarder</el-button>
+                    <el-button type="primary" plain  @click="backToDemo" >Quitter</el-button>
+                  </div>
+        </el-header>
         <body>
             <div class="mapAndPictureContainer" v-if="state == 'demo' || state == 'inGame'">
                 <div id="img">
@@ -46,6 +58,7 @@
             <div class="center" v-if="state == 'demo'">
                 <el-button type="primary" plain  @click="showSeries" >Choisir une série</el-button> 
                 <el-button type="primary" v-if="gameSaved" plain  @click="getSave" >Reprendre la partie sauvegardée</el-button> 
+                
             </div>
 
             <div v-if="state == 'inGame'" class="gameInterface">
@@ -55,14 +68,13 @@
                     High-Score de la série : 0 / {{maxScore}}
                 </div>
                 <div class="timerAndText">
-                    <el-progress v-if="!resultTexte" type="circle" :percentage="(time * 100) / 60" :color="color" status="text">{{time}}</el-progress>
+                    <el-progress v-if="!resultTexte" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
                     {{resultTexte}}
                 </div>
 
-                <!-- {{serieName}} ( zone {{currentPictureIndex}} / {{photos.length}} )<br> -->
+                
                 <div>
-                    <el-button type="primary" plain @click="nextPicture">Zone suivante</el-button>
-                    <el-button type="primary" plain @click="save">Sauvegarder</el-button>
+                    <el-button type="primary" plain @click="nextPicture">Photo suivante</el-button><br><br>
                 </div>
             </div>
 
@@ -120,6 +132,7 @@
                 resultTexte: "",
                 multiplier: 0,
                 time: 60,
+                maxTime: 60,
                 interval: "",
                 color: "#67C23A",
                 gameSaved: false
@@ -253,7 +266,7 @@
                         opacity: 0.4
                   });
 
-                  this.resultTexte = "Pas de chance ! Vous avez cliqué à " + Math.round(distance - 100) + " mètres de la zone où la photo a été prise."
+                  this.resultTexte = "Pas de chance ! Vous avez cliqué à " + Math.round(distance - 300) + " mètres de la zone où la photo a été prise."
               }
 
                clearInterval(this.interval);
@@ -289,6 +302,8 @@
                       $this.photos = response.data._embedded.photos;
                       this.maxScore = this.photos.length * 20;
                       this.distanceD = response.data._embedded.distance
+                      this.zoom = response.data._embedded.zoom
+                      this.center = response.data._embedded.center
                       $this.nextPicture();
                   });
               });
@@ -297,32 +312,52 @@
               this.serieName = "Nancy"
               this.maxScore = this.photos.length * 20;
               this.distanceD = 100;
+              this.zoom = 13;
+              this.center = L.latLng(48.69333, 6.18324);
+              this.currentPictureIndex = 0;
+              this.score = 0;
               this.nextPicture();
           },
 
           //switch to the next picture and set the interval for time gestion
           nextPicture: function(){
               if (this.photos[this.currentPictureIndex]){
+                  
                   this.circles = [];
                   this.currentPicture = this.photos[this.currentPictureIndex].src;
                   this.pictureCoordonates = this.photos[this.currentPictureIndex].pos;
                   this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
                   this.currentPictureIndex ++;
-                  this.time = 60;
+                  
                   this.multiplier = 4;
                   this.resultTexte = "";
-                  this.color = "#67C23A"
+                  this.color = "#67C23A";
+
+                  if (this.difficulty == 0){
+                      this.maxTime = 60;
+                      this.time = 60;
+                  }
+                  else if (this.difficulty == 1){
+                      this.maxTime = 40;
+                      this.time = 40;
+                  }
+                  else{
+                      this.maxTime = 20;
+                      this.time = 20;
+                  }
+
+
                   let $this = this;
                   clearInterval(this.interval);
                   this.interval = setInterval(function(){
                       if ($this.time > 0){
                           $this.time --;
                       }
-                      if ($this.time == 40){
+                      if ($this.time == (Math.round(2/3 * $this.maxTime))){
                         $this.multiplier = 2;
                         $this.color = "orange"
                       }
-                      else if ($this.time == 20){
+                      else if ($this.time == (Math.round(1/3 * $this.maxTime))){
                         $this.multiplier = 1;
                         $this.color = "#F56C6C"
                       }
@@ -365,13 +400,17 @@
                 resultTexte: this.resultTexte,
                 multiplier: this.multiplier,
                 time: this.time,
+                maxTime: this.maxTime,
                 interval: this.interval,
                 color: this.color,
                 gameSaved: this.gameSaved,
-                distanceD: this.distanceD
+                distanceD: this.distanceD,
+                zoom: this.zoom,
+                center: this.center
             });
 
             localStorage.setItem('save', save);
+            this.gameSaved = true;
             alert("partie sauvegardée");
           },
 
@@ -417,6 +456,21 @@
               .then((response) => {
                 console.log("partie finie et envoyée au serveur");
               });
+          },
+
+          backToDemo: function(){
+              this.state = "demo";
+              this.zoom = 13;
+              this.center = L.latLng(48.69333, 6.18324);
+              this.found = false;
+              this.compteur=0;
+              this.circles = []; 
+              this.texte= "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.";
+              this.texte2= "Essaye donc!";
+              this.difficulty= 0;
+              this.resultTexte= "";
+              this.currentPicture = "1.jpg"
+              clearInterval(this.interval);
           }
 
         }
@@ -429,7 +483,13 @@
     body{
         margin : 0;
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+        background-color: rgba(0,0,0,0.01);
     }
+
+    .el-row{
+      box-shadow: 10px 10px 10px -10px #000000;
+    background-color: #ADD19E;
+    padding-bottom: 1em;}
 </style>
     
 <style scoped>
@@ -449,8 +509,9 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: #CCD4B4;
+        background-color: #ADD19E;
         width: 100vw;
+        box-shadow: 10px 10px 10px -10px #000000;
     }
 
     .difficultyContainer{
@@ -496,5 +557,22 @@
 
     }
 
+    .el-header{
+      display:flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background-color: #ADD19E;
+    }
+
+    .header-left{
+      width: 40%;
+      text-align: center;
+    }
+
+    .header-right{
+      width:60%;
+      text-align: right;
+    }
 
 </style>
