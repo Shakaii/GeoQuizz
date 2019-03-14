@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
+@Api( description="Gére les routes liées aux séries sur le côté player.")
 @RequestMapping(value = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SerieRepresentation {
 

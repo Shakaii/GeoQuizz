@@ -1,8 +1,8 @@
 package geoquizz.mobile.bundary;
 
-import geoquizz.mobile.entity.Photo;
-
 import geoquizz.mobile.entity.User;
+import io.swagger.annotations.Api;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
+@Api( description="Gére les routes liées aux users sur le mobile.")
 @RequestMapping(value = "/mobile", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserRepresentation {
 

@@ -1,8 +1,9 @@
 package geoquizz.mobile.bundary;
 
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import geoquizz.mobile.entity.Photo;
 import geoquizz.mobile.entity.Serie;
+import io.swagger.annotations.Api;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,12 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.PrimitiveIterator;
 import java.util.UUID;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
+@Api( description="Gére les routes liées aux séries sur le mobile.")
 @RequestMapping(value = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SerieRepresentation {
 

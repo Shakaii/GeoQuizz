@@ -11,17 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
+@Api( description="Gére les routes liées aux parties pour le côté player.")
 @RequestMapping(value = "/game", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PartieRepresentation {
 
