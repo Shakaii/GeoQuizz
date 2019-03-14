@@ -9,7 +9,8 @@ public class Serie {
     @Id
     private String id;
     private String ville;
-    private String map_refs;
+    private double lat;
+    private double lng;
     private int dist;
 
     public Set<Photo> getPhotos() {
@@ -30,10 +31,16 @@ public class Serie {
 
     }
     
-    public Serie(String ville, int dist, String map_refs) {
+    public Serie(String ville, int dist, double lat, double lng) {
         this.ville = ville;
         this.dist = dist;
-        this.map_refs = map_refs;
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+    public Serie(String ville, int dist, String str) {
+        this.ville = ville;
+        this.dist = dist;
     }
 
     public String getId() {
@@ -52,19 +59,27 @@ public class Serie {
         this.ville = ville;
     }
 
-    public String getMap_refs() {
-        return map_refs;
-    }
-
-    public void setMap_refs(String map_refs) {
-        this.map_refs = map_refs;
-    }
-
     public int getDist() {
         return dist;
     }
 
     public void setDist(int dist) {
         this.dist = dist;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 }
