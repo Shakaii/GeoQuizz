@@ -8,7 +8,7 @@
         <body>
             <div class="mapAndPictureContainer" v-if="state == 'demo' || state == 'inGame'">
                 <div id="img">
-                    <img src="1.jpg">
+                    <img v-bind:src="currentPicture">
                 </div>
                 <l-map @click="mapClick"  :zoom="zoom" :center="center">
                     <l-tile-layer ref="map" :key="tileProvider.name" :name="tileProvider.name" :url="tileProvider.url" :attribution="tileProvider.attribution" layer-type="base"/>
@@ -39,12 +39,24 @@
                     Vous avez laissé des avis sur la page google de tous les restaurants.
                 </el-card>
             </div>
-
-
-            <div class="center">
-                <el-button type="primary" plain v-if="state == 'demo'" @click="showSeries" >Choisir une série</el-button> 
-                <el-button type="primary" plain v-if="state == 'chosingSerie'" @click="startGame" >Commencer la série</el-button> 
+            <div class="center" v-if="state == 'chosingSerie'">
+              <el-input class="nameInput" placeholder="Entrez votre pseudo" prefix-icon="el-icon-edit" v-model="username"></el-input>
+              <el-button type="primary" plain @click="startGame" :disabled="!username || !selectedSerie" >Commencer la série</el-button> 
             </div>
+            <div class="center" v-if="state == 'demo'">
+                <el-button type="primary" plain  @click="showSeries" >Choisir une série</el-button> 
+            </div>
+
+            <div v-if="state == 'inGame'" class="gameInterface">
+                {{resultTexte}}<br>
+                Votre Score : {{score}} / {{maxCurrentScore}}<br>
+                High-Score de la série : 0 / {{maxScore}}<br>
+                Multiplicateur : {{multiplier}}<br>
+                {{time}} secondes restantes<br>
+                {{serieName}} ( zone {{currentPictureIndex}} / {{photos.length}} )<br>
+                <el-button type="primary" plain @click="nextPicture">Zone suivante</el-button>
+            </div>
+
         </body>
     </html>
 </template>
@@ -67,16 +79,16 @@
         data(){
             return{
                 state: 'demo',
-                tileProvider:{
-                  name: 'OpenStreetMap',
-                  visible: true,
-                  attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                  url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                },
-                found : false,
-                compteur:0,
-                zoom:13,
-                center: L.latLng(48.69333, 6.18324),
+                  tileProvider:{
+                    name: 'OpenStreetMap',
+                    visible: true,
+                    attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                    url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                  },
+                  found : false,
+                  compteur:0,
+                  zoom:13,
+                  center: L.latLng(48.69333, 6.18324),
                 map: null,
                 circles : [] ,
                 texte: "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.",
@@ -85,14 +97,27 @@
                 button1: 'always',
                 button2: 'hover',
                 button3: 'hover',
-                series: undefined,
-                selectedSerie: ""
+                selectedSerie: "",
+                username: "",
+                photos: [],
+                currentPicture: "1.jpg",
+                currentPictureIndex: 0,
+                pictureCoordonates : [],
+                score: 0,
+                maxScore: 0,
+                maxCurrentScore: 0,
+                token: "",
+                serieName: "",
+                resultTexte: "",
+                multiplier: 0,
+                time: 0,
+                interval: ""
             }
         },
 
         methods:{
 
-            mapClick: function(e) {
+            demoClick: function(e) {
 
                 this.compteur ++
 
@@ -128,18 +153,138 @@
 
           },
 
+          //run the appropriate function depending of the game state
+          mapClick: function(e){
+              if (this.state == 'demo'){
+                  this.demoClick(e);
+              }
+              else if (this.state == 'inGame' && !this.resultTexte){
+                  this.inGameClick(e);
+              }
+          },
+
+          inGameClick: function(e){
+
+              let lat = e.latlng.lat
+              let lng = e.latlng.lng
+              let pointA = L.latLng(lat, lng);
+              let pointB = L.latLng(this.pictureCoordonates[0], this.pictureCoordonates[1]);
+              let distance = pointA.distanceTo(pointB);
+
+              if (distance < 100){
+                  this.circles.push( {
+                        radius: 100,
+                        latLng: this.pictureCoordonates,
+                        color: "#5bc0de",
+                        fillColor: "#5bc0de",
+                        opacity: 0.8
+                  });
+
+                  let scoreGain = 5 * this.multiplier;
+                  this.score += scoreGain;
+
+                  this.resultTexte = "Bien joué ! Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise. Vous gagnez " + scoreGain + ' points.'
+              }
+              else{
+                  this.circles.push( {
+                        radius: 100,
+                        latLng: this.pictureCoordonates,
+                        color: "#5bc0de",
+                        fillColor: "#5bc0de",
+                        opacity: 0.8
+                  });
+
+                  this.circles.push( {
+                        radius: 50,
+                        latLng: [lat, lng],
+                        color: "red",
+                        fillColor: "red",
+                        opacity: 0.4
+                  });
+
+                  this.resultTexte = "Pas de chance ! Vous avez cliqué à " + Math.round(distance - 100) + " mètres de la zone où la photo a été prise."
+              }
+
+               clearInterval(this.interval);
+
+              
+
+          },
+
           showSeries: function(){
               this.state = "chosingSerie"
               this.texte = "Choisissez une série et une difficultée pour commencer!"
               this.texte2 = ""   
           },
 
+          //request api to start a game and retrieve the pictures
           startGame: function(){
-            this.state = "inGame"
+
+              let $this= this;
+              this.state = "inGame";
+              this.texte = "";
+              this.texte2 = "";
+
+              this.axios.post('http://localhost:8081/game/new?id=' + $this.selectedSerie, 
+              {
+                  username: $this.username,
+                  difficulty: $this.difficulty
+              })
+              .then((response) => {
+                  $this.token = response.data._embedded.token;
+                  $this.axios.get('http://localhost:8081/game/' + serieId + '?token=' + $this.token )
+                  .then((response) => {
+                      $this.photos = response.data._embedded.photos;
+                      $this.
+                      $this.nextPicture();
+                  });
+              });
+
+              this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] }]
+              this.serieName = "Nancy"
+              this.maxScore = this.photos.length * 20;
+              this.nextPicture();
+          },
+
+          //kinda recursive
+          nextPicture: function(){
+              if (this.photos[this.currentPictureIndex]){
+                  this.circles = [];
+                  this.currentPicture = this.photos[this.currentPictureIndex].src;
+                  this.pictureCoordonates = this.photos[this.currentPictureIndex].pos;
+                  this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
+                  this.currentPictureIndex ++;
+                  this.time = 20;
+                  this.multiplier = 4;
+                  this.resultTexte = "";
+                  let $this = this;
+                  this.interval = setInterval(function(){
+                      if ($this.time > 0){
+                          $this.time --;
+                      }
+                      if ($this.time == 15){
+                        $this.multiplier = 2;
+                      }
+                      else if ($this.time == 10){
+                        $this.multiplier = 1;
+                      }
+                      else if ($this.time == 0){
+                        $this.multiplier = 0;
+                      }
+
+                  }, 1000);
+              }else{
+                  this.endGameSignal();
+                  alert("Série terminée avec un score de " + this.score + " sur " + this.maxScore);
+              }
           },
 
           selectSerieId(id){
-            this.selectedSerieId = id;
+            this.selectedSerie = id;
+          },
+
+          endGameSignal(){
+
           }
 
         }
@@ -156,6 +301,12 @@
 </style>
     
 <style scoped>
+
+  .nameInput{
+    max-width: 30%;
+    margin-right: 1em;
+  }
+
     .vue2leaflet-map{
         height:400px;        
         width:50%;

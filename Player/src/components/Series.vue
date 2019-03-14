@@ -1,6 +1,6 @@
 <template>
     <el-row>
-        <serie v-on:selectSerie="selectSerie" v-for="serie in series" v-bind:name="serie.ville" v-bind:id="serie.id" v-bind:selected="serie.ville == selectedSerie"></serie>
+        <serie v-on:serieId="selectSerieId" v-on:selectSerie="selectSerie" v-for="serie in series" v-bind:name="serie.ville" v-bind:id="serie.id" v-bind:selected="serie.ville == selectedSerie"></serie>
     </el-row>
 </template>
 
@@ -27,30 +27,43 @@ export default {
       },
       selectSerie(ville){
           this.selectedSerie = ville
+      },
+      selectSerieId(id){
+        this.$emit('serieId', id);
       }
   },
   created: function() {
       this.retrieveSeries()
       this.series = [{
+                  id: 123,
                   ville: "Nancy"
               }, {
+                id: 234,
                 ville: "Paris"
               }, {
-                ville: "Paris"
+                id: 345,
+                ville: "Metz"
               }, {
-                ville: "Paris"
+                id: 456,
+                ville: "Nancy by night"
               }, {
-                ville: "Paris"
+                id: 567,
+                ville: "Monuments de Paris"
               }, {
-                ville: "Paris"
+                id: 678,
+                ville: "Laxou"
               }, {
-                ville: "Paris"
+                id:789,
+                ville: "Villers-lès-Nancy"
               }, {
-                ville: "Paris"
+                id: 890,
+                ville: "PAM"
               }, {
-                ville: "Paris"
+                id: 901,
+                ville: "Coin pommé"
               }, {
-                ville: "Paris"
+                id: 110,
+                ville: "Une ville"
               }]
   }
 }
