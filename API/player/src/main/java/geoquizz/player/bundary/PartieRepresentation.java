@@ -64,7 +64,7 @@ public class PartieRepresentation {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
+       
     }
 
     //randomize les photos d'une partie pour en renvoyer 10 maximum dans un ordre aleatoire
@@ -74,12 +74,16 @@ public class PartieRepresentation {
         ArrayList<Photo> listPhotos = new ArrayList<Photo>();
         listPhotos.addAll(photos);
         Collections.shuffle(listPhotos);
-        //recupere les 10 premieres photos pour le set à renvoyer
-        Set<Photo> photosRand = new HashSet<Photo>();
-        for(int i=0;i<10;i++){
-            photosRand.add(listPhotos.get(i));
+        //recupere les 10 premieres photos pour le set à renvoyer      
+        if(listPhotos.size()<11){
+            return photos;
+        }else{
+            Set<Photo> photosRand = new HashSet<Photo>();   
+            for(int i=0;i<10;i++){
+                photosRand.add(listPhotos.get(i));
+            } 
+            return photosRand;
         }
-        return photosRand;
     }
 
     @PutMapping(value = "/result")
