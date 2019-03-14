@@ -171,23 +171,56 @@
               let pointB = L.latLng(this.pictureCoordonates[0], this.pictureCoordonates[1]);
               let distance = pointA.distanceTo(pointB);
 
-              if (distance < 100){
+              if (distance < (this.distanceD * 3)){
                   this.circles.push( {
-                        radius: 100,
+                        radius: this.distanceD,
+                        latLng: this.pictureCoordonates,
+                        color: "#5bc0de",
+                        fillColor: "#5bc0de",
+                        opacity: 0.8
+                  });
+                  this.circles.push( {
+                        radius: this.distanceD * 2,
+                        latLng: this.pictureCoordonates,
+                        color: "#5bc0de",
+                        fillColor: "#5bc0de",
+                        opacity: 0.8
+                  });
+                  this.circles.push( {
+                        radius: this.distanceD * 3,
                         latLng: this.pictureCoordonates,
                         color: "#5bc0de",
                         fillColor: "#5bc0de",
                         opacity: 0.8
                   });
 
-                  let scoreGain = 5 * this.multiplier;
+                  let scoreGain = 0;
+
+                  if (distance < this.distanceD) scoreGain = 5 * this.multiplier;
+                  else if (distance < (this.distanceD * 2)) scoreGain = 3 * this.multiplier;
+                  else if (distance < (this.distanceD * 3)) scoreGain = 1 * this.multiplier;
+
                   this.score += scoreGain;
 
                   this.resultTexte = "Bien joué ! Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise. Vous gagnez " + scoreGain + ' points.'
               }
               else{
                   this.circles.push( {
-                        radius: 100,
+                        radius: this.distanceD,
+                        latLng: this.pictureCoordonates,
+                        color: "#5bc0de",
+                        fillColor: "#5bc0de",
+                        opacity: 0.8
+                  });
+                  this.circles.push( {
+                        radius: this.distanceD * 2,
+                        latLng: this.pictureCoordonates,
+                        color: "#5bc0de",
+                        fillColor: "#5bc0de",
+                        opacity: 0.8
+                  });
+                  this.circles.push( {
+                        radius: this.distanceD * 3,
                         latLng: this.pictureCoordonates,
                         color: "#5bc0de",
                         fillColor: "#5bc0de",
@@ -235,7 +268,8 @@
                   $this.axios.get('http://localhost:8081/game/' + serieId + '?token=' + $this.token )
                   .then((response) => {
                       $this.photos = response.data._embedded.photos;
-                      $this.
+                      this.maxScore = this.photos.length * 20;
+                      this.distanceD = response.data._embedded.distance
                       $this.nextPicture();
                   });
               });
@@ -243,6 +277,7 @@
               this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] }]
               this.serieName = "Nancy"
               this.maxScore = this.photos.length * 20;
+              this.distanceD = 100;
               this.nextPicture();
           },
 
