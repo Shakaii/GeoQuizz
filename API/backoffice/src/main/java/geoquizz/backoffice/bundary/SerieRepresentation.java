@@ -1,5 +1,9 @@
 package geoquizz.backoffice.bundary;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,12 +37,11 @@ public class SerieRepresentation {
     private final SerieResource sr;
     private final PhotoResource pr;
 
-    private final StorageService storageService;
 
-    public SerieRepresentation(SerieResource sr, PhotoResource pr, StorageService ss){
+    @Autowired
+    public SerieRepresentation(SerieResource sr, PhotoResource pr){
         this.sr=sr;
         this.pr=pr;
-        this.storageService = ss;
     }
 
     @GetMapping(value = "/series")
@@ -107,9 +110,30 @@ public class SerieRepresentation {
     @PostMapping(value = "/file")
     public String upFile(@RequestParam("file") MultipartFile file,
                          RedirectAttributes redirectAttributes) {
-        storageService.store(file);
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("./files/" + file.getOriginalFilename());
+            Files.write(path, bytes);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
+
+        return file.getOriginalFilename() +"/";
+    }
+
+    @DeleteMapping(value = "/file")
+    public String delFile(@RequestBody String id,
+                         RedirectAttributes redirectAttributes) {
+        try {
+            Path path = Paths.get("./files/" + id);
+            Files.delete(path);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully deleted " + id + "!");
 
         return "redirect:/";
     }
