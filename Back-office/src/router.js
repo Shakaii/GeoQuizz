@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import AddImage from './components/AddImage.vue'
 import Series from './components/Series.vue'
 import CreateSerie from './components/CreateSerie.vue'
 
@@ -21,7 +21,7 @@ export default new Router({
     {
       path: '/addPhotos',
       name: 'add photos',
-      component: null
+      component: AddImage
     },
     {
       path: '/about',
