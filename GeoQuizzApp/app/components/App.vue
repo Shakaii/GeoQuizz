@@ -22,7 +22,20 @@
             </StackLayout>
             <GridLayout ~mainContent columns="*" rows="*">
                 <Label v-show="current == 0" class="message" :text="msg" col="0" row="0"/>
-                <Serie v-show="current == 1" ></Serie>
+                <label v-show="current == 1" class="message" :text="serieInfo" col="0" row="0"/>
+                <StackLayout v-show="current == 1">
+                    <Button text="Take Picture" @tap="takePicture" />
+                    <Button text="Choose Picture" @tap="selectPicture" />
+                        <WrapLayout>
+                            <Image v-for="img in images" :src="img.src" width="75" height="75" />
+                        </WrapLayout>
+                </StackLayout>
+                <StackLayout v-show="current == 1">
+                  
+                        <WrapLayout>
+                            <Image v-for="ima in seriePhoto" :src="ima.url" width="150" height="150" />
+                        </WrapLayout>
+                </StackLayout>
           
             </GridLayout>
             
@@ -33,11 +46,18 @@
 </template>
 
 <script>
-import Serie from './Serie.vue';
+
+import * as camera from "nativescript-camera";
+    import * as imagepicker from "nativescript-imagepicker";
+
+    import {
+        Image
+    } from "tns-core-modules/ui/image";
+
   export default {
       name: 'App',
       components: {
-          Serie,
+          
          
       },
 
@@ -47,6 +67,8 @@ import Serie from './Serie.vue';
         current: "",
         seriesInfo:"",
         serieInfo:"",
+        seriePhoto:"",
+        images: [],
       }
     },
     methods:{
@@ -62,12 +84,63 @@ import Serie from './Serie.vue';
         searchSerie(link){
              this.axios
                 .get(link)
-                .then(response => (this.serieInfo = response.data.id))         
+                .then(response => (this.serieInfo = response.data.ville,this.seriePhoto = response.data.photos))         
                 .catch(error => {
                 console.log(error);             
                 this.errored = true; 
             }); 
-        }
+        },
+        selectPicture() {
+                let context = imagepicker.create({
+                    mode: "multiple"
+                });
+
+                context
+                    .authorize()
+                    .then(function() {
+                        return context.present();
+                    })
+                    .then(selection => {
+                        selection.forEach(selected => {
+                            console.log(JSON.stringify(selected));
+
+                            let img = new Image();
+                            img.src = selected;
+                            this.images.push(img);
+                        });
+                    })
+                    .catch(function(e) {
+                        console.log("error in selectPicture", e);
+                    });
+            },
+            takePicture() {
+                camera
+                    .requestPermissions()
+                    .then(() => {
+                        camera
+                            .takePicture({
+                                width: 300,
+                                height: 300,
+                                keepAspectRatio: true,
+                                saveToGallery: false
+                            })
+                            .then(imageAsset => {
+                                let img = new Image();
+                                img.src = imageAsset;
+                                this.images.push(img);
+                                console.log(
+                                    "ive got " + this.images.length +
+                                    " images now."
+                                );
+                            })
+                            .catch(e => {
+                                console.log("error:", e);
+                            });
+                    })
+                    .catch(e => {
+                        console.log("Error requesting permission");
+                    });
+            }
     },
      created:function() {
         this.searchSeries();
@@ -76,8 +149,8 @@ import Serie from './Serie.vue';
 </script>
 
 <style scoped>
-    ActionBar {
-        background-color: #53ba82;
+    ActionBar{
+        background-color: teal;
         color: #ffffff;
       
     }
@@ -97,7 +170,7 @@ import Serie from './Serie.vue';
     .drawer-header {
         padding: 50 16 16 16;
         margin-bottom: 16;
-        background-color: #53ba82;
+        background-color:teal;
         color: #ffffff;
         font-size: 24;
     }
