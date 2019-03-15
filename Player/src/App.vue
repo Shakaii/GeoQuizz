@@ -488,16 +488,19 @@
 
 <style>
 
+    html{
+      min-height: 100%;
+    }
+
     body{
         margin : 0;
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         background-color: rgba(0,0,0,0.01);
+        min-height: 100%
     }
 
     .el-row{
         box-shadow: 10px 10px 10px -10px #000000;
-        background-color: #ADD19E;
-        padding-bottom: 1em;
     }
 </style>
     
@@ -507,6 +510,7 @@
         font-weight: 100;
         line-height: 20px;
         font-size: 20px;
+        text-shadow: 1px 1px 1px white
     }
 
     .icon{
@@ -521,16 +525,15 @@
     .vue2leaflet-map{
         height:400px;        
         width:60%;
+        box-shadow: 10px 10px 10px -10px #000000;
+        border-bottom-left-radius: 20px;
     }
 
     .mapAndPictureContainer{
         display:flex;
         flex-direction: row;
         justify-content: center;
-        align-items: center;
-        background-color: #ADD19E;
         width: 100vw;
-        box-shadow: 10px 10px 10px -10px #000000;
     }
 
     .difficultyContainer{
@@ -548,11 +551,15 @@
 
     #img{
         width: 40%;
-    }
+        
+    }   
 
     #img img{
         width: 100%;
         height: auto;
+        box-shadow: 10px 10px 10px -10px #000000;
+        border-bottom-right-radius: 5px;
+        
     }
 
     #mapid{
@@ -580,7 +587,7 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: #ADD19E;
+        background-color: #409EFF;
     }
 
     .header-left{
@@ -625,6 +632,7 @@
             margin:0;
             padding: 0;
             height:200px;
+            border-bottom-left-radius: 0px;
         }
 
         .gameInterface{
@@ -652,16 +660,21 @@
         .progressBar{
             display:initial;
             width: 100%;
-            order: 1;
+            
             padding-bottom:0.5em;
         }
 
         .timerAndText{
             width: 100%;
+            order: 1;
         }
 
         .actionButton{
             padding-top:1em;
+        }
+
+        #img img{
+          border-bottom-right-radius: 0px;
         }
     }
 
