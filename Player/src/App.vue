@@ -296,7 +296,7 @@
                 $this.axios.get('http://localhost:8083/game/' + response.data.id + '?token=' + $this.token )
                 .then((response) => {
                     $this.photos = response.data.photos;
-                    $this.maxScore = $his.photos.length * 20;
+                    $this.maxScore = $this.photos.length * 20;
                     $this.distanceD = response.data.dist;
                     $this.zoom = response.data.zoom;
                     $this.center = L.latLng(response.data.x,response.data.y);
