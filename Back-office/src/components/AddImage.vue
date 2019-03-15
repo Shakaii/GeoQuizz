@@ -7,11 +7,12 @@
     </el-steps>
     <div v-show="active == 0" >
         <file-pond  @processfile="detail" name="file" allow-multiple="true" max-files="3" server="http://localhost:8081/office/file"/>
-        <el-button  style="margin-top: 12px;" @click="next">Prochaine étape</el-button>
+        <el-button :disabled="imgs.length == 0"  style="margin-top: 12px;" @click="next" icon="el-icon-arrow-right">Prochaine étape</el-button>
     </div>
     <div v-show="active == 1">
+        <geoloc :files=this.imgs></geoloc>
         <el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
-        <el-button style="margin-top: 12px;" @click="next">Prochaine étape</el-button>
+        <el-button style="margin-top: 12px;" @click="next" icon="el-icon-arrow-right">Prochaine étape</el-button>
     </div>
     <div v-show="active == 2">
         <el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
@@ -24,7 +25,7 @@
 <script>
 // Import FilePond
 import vueFilePond, {setOptions } from 'vue-filepond';
-
+import Geoloc from './Geoloc'
 // Import styles
 import 'filepond/dist/filepond.min.css';
 
@@ -50,15 +51,19 @@ export default {
     data() {
         return {
             active: 0,
-            imgs: []
+            img: 1,
+            imgs: [],
+            src: "http://localhost:8081/office/files/?name="
         }
     },
     components: {
-        FilePond
+        FilePond,
+        Geoloc
     },
     methods: {
         detail(error, file) {
             this.imgs.push(file.file.name)
+            console.log(this.imgs[0])
         },
         next() {
         if (this.active++ > 2) this.active = 0;
@@ -66,6 +71,19 @@ export default {
       back() {
         if (this.active-- < 0) this.active = 0;
       },
-    }
+      nextImage() {
+          if (this.img++ < this.imgs.length) this.img = 0;
+      }
+    },
+    computed: {
+        
+    },
 }
 </script>
+
+<style scoped>
+    img {
+  width: 50%;
+  height: auto;
+}
+</style>

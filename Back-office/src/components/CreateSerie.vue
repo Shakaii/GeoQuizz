@@ -11,16 +11,16 @@
                 v-model="name"
                 clearable>
             </el-input>
-        <el-button :disabled='name == ""' style="margin-top: 12px;" @click="next">Prochaine étape</el-button>
+        <el-button :disabled='name == ""' style="margin-top: 12px;" icon="el-icon-arrow-right" @click="next">Prochaine étape</el-button>
     </div>
     <div v-show="active == 1">
-        <div class="mapAndPictureContainer">
+        <div>
                 <l-map @click="demoClick"  :zoom="zoom" :center="center">
                     <l-tile-layer ref="map" :key="tileProvider.name" :name="tileProvider.name" :url="tileProvider.url" :attribution="tileProvider.attribution" layer-type="base"/>
                 </l-map>
             </div>
         <el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
-        <el-button :disabled="lat == null"  style="margin-top: 12px;" @click="next">Prochaine étape</el-button>
+        <el-button :disabled="lat == null"  style="margin-top: 12px;" icon="el-icon-arrow-right" @click="next">Prochaine étape</el-button>
     </div>
     <div v-show="active == 2">
         <el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
