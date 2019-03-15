@@ -497,7 +497,7 @@
     .el-row{
         box-shadow: 10px 10px 10px -10px #000000;
         background-color: #ADD19E;
-        padding-bottom: 1em;*
+        padding-bottom: 1em;
     }
 </style>
     
