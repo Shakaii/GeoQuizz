@@ -6,16 +6,17 @@
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         </head>
         <el-header>
-                  <div class="header-left" v-if="state != 'inGame'">
-                      GeoQuizz
-                  </div>
-                  <div class="header-left" v-if="state=='inGame'">
-                    <b>{{serieName}}</b> : {{currentPictureIndex}} / {{photos.length}}<br>
-                  </div>
-                  <div class="header-right" v-if="state == 'inGame' || state =='chosingSerie'">
-                    <el-button type="primary" plain v-if="state == 'inGame'" @click="save">Sauvegarder</el-button>
-                    <el-button type="primary" plain  @click="backToDemo" >Quitter</el-button>
-                  </div>
+            <div class="header-left title" v-if="state != 'inGame'">
+                <img class="icon" src="favicon.png">
+                GeoQuizz
+            </div>
+            <div class="header-left" v-if="state=='inGame'">
+                <b>{{serieName}}</b> : {{currentPictureIndex}} / {{photos.length}}<br>
+            </div>
+            <div class="header-right" v-if="state == 'inGame' || state =='chosingSerie'">
+                <el-button type="primary" plain v-if="state == 'inGame'" @click="save">Sauvegarder</el-button>
+                <el-button type="primary" plain  @click="backToDemo" >Quitter</el-button>
+            </div>
         </el-header>
         <body>
             <div class="mapAndPictureContainer" v-if="state == 'demo' || state == 'inGame'">
@@ -51,18 +52,18 @@
                     Vous avez laissé des avis sur la page google de tous les restaurants.
                 </el-card>
             </div>
+
             <div class="center" v-if="state == 'chosingSerie'">
-              <el-input class="nameInput" placeholder="Entrez votre pseudo" prefix-icon="el-icon-edit" v-model="username"></el-input>
+              <el-input class="nameInput" v-on:keyup.enter="startGame"  placeholder="Entrez votre pseudo" prefix-icon="el-icon-edit" v-model="username"></el-input>
               <el-button type="primary" plain @click="startGame" :disabled="!username || !selectedSerie" >Commencer la série</el-button> 
             </div>
+
             <div class="center" v-if="state == 'demo'">
                 <el-button type="primary" plain  @click="showSeries" >Choisir une série</el-button> 
                 <el-button type="primary" v-if="gameSaved" plain  @click="getSave" >Reprendre la partie sauvegardée</el-button> 
-                
             </div>
 
             <div v-if="state == 'inGame'" class="gameInterface">
-                
                 <div class="score">
                     Votre Score : {{score}} / {{maxCurrentScore}}<br>
                     High-Score de la série : 0 / {{maxScore}}
@@ -72,14 +73,11 @@
                     <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" show-text="false">{{time}} secondes restantes</el-progress>
                     {{resultTexte}}
                 </div>
-
-                
                 <div class="actionButton">
                     <el-button type="primary" v-if="currentPictureIndex == photos.length"  :disabled="!resultTexte" plain @click="nextPicture">Fin</el-button>
                     <el-button type="primary" v-if="currentPictureIndex < photos.length"  :disabled="!resultTexte" plain @click="nextPicture">Photo suivante</el-button><br><br>
                 </div>
             </div>
-
         </body>
     </html>
 </template>
@@ -99,301 +97,294 @@
             Series
         },
 
-        data(){
-            return{
-                state: 'demo',
-                  tileProvider:{
-                    name: 'OpenStreetMap',
-                    visible: true,
-                    attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                    url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                  },
-                  found : false,
-                  compteur:0,
-                  zoom:13,
-                  center: L.latLng(48.69333, 6.18324),
-                map: null,
-                circles : [] ,
-                texte: "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.",
-                texte2: "Essaye donc!",
-                difficulty: 0,
-                button1: 'always',
-                button2: 'hover',
-                button3: 'hover',
-                selectedSerie: "",
-                username: "",
-                photos: [],
-                currentPicture: "1.jpg",
-                currentPictureIndex: 0,
-                pictureCoordonates : [],
-                score: 0,
-                maxScore: 0,
-                maxCurrentScore: 0,
-                token: "",
-                serieName: "",
-                resultTexte: "",
-                multiplier: 0,
-                time: 60,
-                maxTime: 60,
-                interval: "",
-                color: "#67C23A",
-                gameSaved: false
+    data(){
+        return{
+            state: 'demo',
+            tileProvider:{
+                name: 'OpenStreetMap',
+                visible: true,
+                attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+            },
+            found : false,
+            compteur:0,
+            zoom:13,
+            center: L.latLng(48.69333, 6.18324),
+            circles : [] ,
+            texte: "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.",
+            texte2: "Essaye donc!",
+            difficulty: 0,
+            button1: 'always',
+            button2: 'hover',
+            button3: 'hover',
+            selectedSerie: "",                username: "",
+            photos: [],
+            currentPicture: "1.jpg",
+            currentPictureIndex: 0,
+            pictureCoordonates : [],
+            score: 0,
+            maxScore: 0,
+            maxCurrentScore: 0,
+            token: "",
+            serieName: "",
+            resultTexte: "",
+            multiplier: 0,
+            time: 60,
+            maxTime: 60,
+            interval: "",
+            color: "#67C23A",
+            gameSaved: false
+        }
+    },
+    mounted(){
+        //register the save
+        if(localStorage.getItem('save')){
+            this.gameSaved = true;
+        }
+    },
+
+    methods:{
+
+        //deals with clicks on the map when the app is in demo state
+        demoClick: function(e) {
+
+            this.compteur ++
+            let lat = e.latlng.lat
+            let lng = e.latlng.lng
+            let pointA = L.latLng(lat, lng);
+            let pointB = L.latLng(48.6829, 6.16106);
+            let distance = pointA.distanceTo(pointB);
+            if (distance < 100 && !this.found){
+                this.texte = "Bravo !";
+                this.texte2 = "Tu as trouvé l'endroit exact en seulement " + this.compteur + " fois!";
+                this.circles.push( {
+                    radius: 100,
+                    latLng: [48.6829, 6.16106],
+                    color: "#5bc0de",
+                    fillColor: "#5bc0de",
+                    opacity: 0.8
+                });
+                this.found = true;
+            }
+            else if (!this.found){
+                this.circles.push( {
+                    radius: 50,
+                    latLng: [lat, lng],
+                    color: "red",
+                    fillColor: "red",
+                    opacity: 0.4
+                });
+                this.texte = "Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise.";
+                this.texte2 = "Heuresement, c'est une démo : vous pouvez réessayer autant que vous le voulez!";
+            }
+      },
+
+        //run the appropriate function depending of the game state
+        mapClick: function(e){
+
+            if (this.state == 'demo'){
+                this.demoClick(e);
+            }
+            else if (this.state == 'inGame' && !this.resultTexte){
+                this.inGameClick(e);
             }
         },
-        mounted(){
-            if(localStorage.getItem('save')){
-                this.gameSaved = true;
+
+        //deal with the on click event of the map when the game is started
+        inGameClick: function(e){
+
+            let lat = e.latlng.lat
+            let lng = e.latlng.lng
+            let pointA = L.latLng(lat, lng);
+            let pointB = L.latLng(this.pictureCoordonates[0], this.pictureCoordonates[1]);
+            let distance = pointA.distanceTo(pointB);
+
+            if (distance < (this.distanceD * 3)){
+                this.circles.push( {
+                      radius: this.distanceD,
+                      latLng: this.pictureCoordonates,
+                      color: "#5bc0de",
+                      fillColor: "#5bc0de",
+                      opacity: 0.8
+                });
+                this.circles.push( {
+                      radius: this.distanceD * 2,
+                      latLng: this.pictureCoordonates,
+                      color: "#5bc0de",
+                      fillColor: "#5bc0de",
+                      opacity: 0.8
+                });
+                this.circles.push( {
+                      radius: this.distanceD * 3,
+                      latLng: this.pictureCoordonates,
+                      color: "#5bc0de",
+                      fillColor: "#5bc0de",
+                      opacity: 0.8
+                });
+
+                let scoreGain = 0;
+
+                if (distance < this.distanceD) scoreGain = 5 * this.multiplier;
+                else if (distance < (this.distanceD * 2)) scoreGain = 3 * this.multiplier;
+                else if (distance < (this.distanceD * 3)) scoreGain = 1 * this.multiplier;
+
+                this.score += scoreGain;
+
+                this.resultTexte = "Bien joué ! Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise. Vous gagnez " + scoreGain + ' points.'
             }
+            else{
+                this.circles.push( {
+                      radius: this.distanceD,
+                      latLng: this.pictureCoordonates,
+                      color: "#5bc0de",
+                      fillColor: "#5bc0de",
+                      opacity: 0.8
+                });
+                this.circles.push( {
+                      radius: this.distanceD * 2,
+                      latLng: this.pictureCoordonates,
+                      color: "#5bc0de",
+                      fillColor: "#5bc0de",
+                      opacity: 0.8
+                });
+                this.circles.push( {
+                      radius: this.distanceD * 3,
+                      latLng: this.pictureCoordonates,
+                      color: "#5bc0de",
+                      fillColor: "#5bc0de",
+                      opacity: 0.8
+                });
+                this.circles.push( {
+                      radius: 50,
+                      latLng: [lat, lng],
+                      color: "red",
+                      fillColor: "red",
+                      opacity: 0.4
+                });
+
+                this.resultTexte = "Pas de chance ! Vous avez cliqué à " + Math.round(distance - 300) + " mètres de la zone où la photo a été prise."
+            }
+              clearInterval(this.interval);
         },
 
-        methods:{
+        //change the state of the game for chosing Serie and difficulty
+        showSeries: function(){
 
-            //deals with clicks on the map when the app is in demo state
-            demoClick: function(e) {
+            this.state = "chosingSerie";
+            this.texte = "Choisissez une série et une difficultée pour commencer!";;
+            this.texte2 = ""   
+        },
 
-                this.compteur ++
+        //request api to start a game and retrieve the pictures
+        startGame: function(){
 
-                let lat = e.latlng.lat
-                let lng = e.latlng.lng
-                let pointA = L.latLng(lat, lng);
-                let pointB = L.latLng(48.6829, 6.16106);
-                let distance = pointA.distanceTo(pointB);
+            let $this= this;
+            this.state = "inGame";
+            this.texte = "";
+            this.texte2 = "";
 
-                if (distance < 100 && !this.found){
-                    this.texte = "Bravo !";
-                    this.texte2 = "Tu as trouvé l'endroit exact en seulement " + this.compteur + " fois!";
-                    this.circles.push( {
-                        radius: 100,
-                        latLng: [48.6829, 6.16106],
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                    });
-                    this.found = true;
+            this.axios.post('http://localhost:8081/game/new?id=' + $this.selectedSerie, 
+            {
+                username: $this.username,
+                difficulty: $this.difficulty
+            })
+            .then((response) => {
+                $this.token = response.data._embedded.token;
+                $this.axios.get('http://localhost:8081/game/' + serieId + '?token=' + $this.token )
+                .then((response) => {
+                    $this.photos = response.data._embedded.photos;
+                    this.maxScore = this.photos.length * 20;
+                    this.distanceD = response.data._embedded.distance
+                    this.zoom = response.data._embedded.zoom
+                    this.center = response.data._embedded.center
+                    $this.nextPicture();
+                });
+            });
+
+            this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] }]
+            this.serieName = "Nancy"
+            this.maxScore = this.photos.length * 20;
+            this.distanceD = 100;
+            this.zoom = 13;
+            this.center = L.latLng(48.69333, 6.18324);
+            this.currentPictureIndex = 0;
+            this.score = 0;
+            this.nextPicture();
+        },
+
+        //switch to the next picture and set the interval for time gestion
+        //if it's the last picture, prompt a message to save the score or not
+        nextPicture: function(){
+
+            if (this.photos[this.currentPictureIndex]){      
+                this.circles = [];
+                this.currentPicture = this.photos[this.currentPictureIndex].src;
+                this.pictureCoordonates = this.photos[this.currentPictureIndex].pos;
+                this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
+                this.currentPictureIndex ++;
+                
+                this.multiplier = 4;
+                this.resultTexte = "";
+                this.color = "#67C23A";
+
+                if (this.difficulty == 0){
+                    this.maxTime = 60;
+                    this.time = 60;
                 }
-                else if (!this.found){
-                    this.circles.push( {
-                        radius: 50,
-                        latLng: [lat, lng],
-                        color: "red",
-                        fillColor: "red",
-                        opacity: 0.4
-                    });
-                    this.texte = "Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise.";
-                    this.texte2 = "Heuresement, c'est une démo : vous pouvez réessayer autant que vous le voulez!";
+                else if (this.difficulty == 1){
+                    this.maxTime = 40;
+                    this.time = 40;
+                }
+                else{
+                    this.maxTime = 20;
+                    this.time = 20;
                 }
 
-          },
-
-          //run the appropriate function depending of the game state
-          mapClick: function(e){
-              if (this.state == 'demo'){
-                  this.demoClick(e);
-              }
-              else if (this.state == 'inGame' && !this.resultTexte){
-                  this.inGameClick(e);
-              }
-          },
-
-          //deal with the on click event of the map when the game is started
-          inGameClick: function(e){
-
-              let lat = e.latlng.lat
-              let lng = e.latlng.lng
-              let pointA = L.latLng(lat, lng);
-              let pointB = L.latLng(this.pictureCoordonates[0], this.pictureCoordonates[1]);
-              let distance = pointA.distanceTo(pointB);
-
-              if (distance < (this.distanceD * 3)){
-                  this.circles.push( {
-                        radius: this.distanceD,
-                        latLng: this.pictureCoordonates,
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                  });
-                  this.circles.push( {
-                        radius: this.distanceD * 2,
-                        latLng: this.pictureCoordonates,
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                  });
-                  this.circles.push( {
-                        radius: this.distanceD * 3,
-                        latLng: this.pictureCoordonates,
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                  });
-
-                  let scoreGain = 0;
-
-                  if (distance < this.distanceD) scoreGain = 5 * this.multiplier;
-                  else if (distance < (this.distanceD * 2)) scoreGain = 3 * this.multiplier;
-                  else if (distance < (this.distanceD * 3)) scoreGain = 1 * this.multiplier;
-
-                  this.score += scoreGain;
-
-                  this.resultTexte = "Bien joué ! Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise. Vous gagnez " + scoreGain + ' points.'
-              }
-              else{
-                  this.circles.push( {
-                        radius: this.distanceD,
-                        latLng: this.pictureCoordonates,
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                  });
-                  this.circles.push( {
-                        radius: this.distanceD * 2,
-                        latLng: this.pictureCoordonates,
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                  });
-                  this.circles.push( {
-                        radius: this.distanceD * 3,
-                        latLng: this.pictureCoordonates,
-                        color: "#5bc0de",
-                        fillColor: "#5bc0de",
-                        opacity: 0.8
-                  });
-
-                  this.circles.push( {
-                        radius: 50,
-                        latLng: [lat, lng],
-                        color: "red",
-                        fillColor: "red",
-                        opacity: 0.4
-                  });
-
-                  this.resultTexte = "Pas de chance ! Vous avez cliqué à " + Math.round(distance - 300) + " mètres de la zone où la photo a été prise."
-              }
-
-               clearInterval(this.interval);
-
-              
-
-          },
-
-          //change the state of the game for chosing Serie and difficulty
-          showSeries: function(){
-              this.state = "chosingSerie"
-              this.texte = "Choisissez une série et une difficultée pour commencer!"
-              this.texte2 = ""   
-          },
-
-          //request api to start a game and retrieve the pictures
-          startGame: function(){
-
-              let $this= this;
-              this.state = "inGame";
-              this.texte = "";
-              this.texte2 = "";
-
-              this.axios.post('http://localhost:8081/game/new?id=' + $this.selectedSerie, 
-              {
-                  username: $this.username,
-                  difficulty: $this.difficulty
-              })
-              .then((response) => {
-                  $this.token = response.data._embedded.token;
-                  $this.axios.get('http://localhost:8081/game/' + serieId + '?token=' + $this.token )
-                  .then((response) => {
-                      $this.photos = response.data._embedded.photos;
-                      this.maxScore = this.photos.length * 20;
-                      this.distanceD = response.data._embedded.distance
-                      this.zoom = response.data._embedded.zoom
-                      this.center = response.data._embedded.center
-                      $this.nextPicture();
-                  });
-              });
-
-              this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] }]
-              this.serieName = "Nancy"
-              this.maxScore = this.photos.length * 20;
-              this.distanceD = 100;
-              this.zoom = 13;
-              this.center = L.latLng(48.69333, 6.18324);
-              this.currentPictureIndex = 0;
-              this.score = 0;
-              this.nextPicture();
-          },
-
-          //switch to the next picture and set the interval for time gestion
-          //if it's the last picture, prompt a message to save the score or not
-          nextPicture: function(){
-              if (this.photos[this.currentPictureIndex]){
-                  
-                  this.circles = [];
-                  this.currentPicture = this.photos[this.currentPictureIndex].src;
-                  this.pictureCoordonates = this.photos[this.currentPictureIndex].pos;
-                  this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
-                  this.currentPictureIndex ++;
-                  
-                  this.multiplier = 4;
-                  this.resultTexte = "";
-                  this.color = "#67C23A";
-
-                  if (this.difficulty == 0){
-                      this.maxTime = 60;
-                      this.time = 60;
-                  }
-                  else if (this.difficulty == 1){
-                      this.maxTime = 40;
-                      this.time = 40;
-                  }
-                  else{
-                      this.maxTime = 20;
-                      this.time = 20;
-                  }
-
-
-                  let $this = this;
-                  clearInterval(this.interval);
-                  this.interval = setInterval(function(){
-                      if ($this.time > 0){
-                          $this.time --;
-                      }
-                      if ($this.time == (Math.round(2/3 * $this.maxTime))){
-                        $this.multiplier = 2;
-                        $this.color = "orange"
-                      }
-                      else if ($this.time == (Math.round(1/3 * $this.maxTime))){
-                        $this.multiplier = 1;
-                        $this.color = "#F56C6C"
-                      }
-                      else if ($this.time == 0){
-                        $this.multiplier = 0;
-                      }
-
-                  }, 1000);
-              }else{
-                  
-                  this.$confirm("Série terminée avec un score de " + this.score + " sur " + this.maxScore + ". Voulez vous enregistrer votre score ?" , 'Pas mal !', {
-                      confirmButtonText: 'Enregistrer mon score',
-                      cancelButtonText: 'Quitter',
-                      type: 'warning'
-                    }).then(() => {
-                      this.endGameSignal(true);
-                      this.$message({
+                let $this = this;
+                clearInterval(this.interval);
+                this.interval = setInterval(function(){
+                    if ($this.time > 0){
+                        $this.time --;
+                    }
+                    if ($this.time == (Math.round(2/3 * $this.maxTime))){
+                      $this.multiplier = 2;
+                      $this.color = "orange"
+                    }
+                    else if ($this.time == (Math.round(1/3 * $this.maxTime))){
+                      $this.multiplier = 1;
+                      $this.color = "#F56C6C"
+                    }
+                    else if ($this.time == 0){
+                      $this.multiplier = 0;
+                    }
+                }, 1000);
+            }
+            else{
+                this.$confirm("Série terminée avec un score de " + this.score + " sur " + this.maxScore + ". Voulez vous enregistrer votre score ?" , 'Pas mal !', {
+                    confirmButtonText: 'Enregistrer mon score',
+                    cancelButtonText: 'Quitter',
+                    type: 'warning'
+                }).then(() => {
+                    this.endGameSignal(true);
+                    this.$message({
                         type: 'success',
                         message: 'Score enregistré'
-                      });
-                    }).catch(() => {
-                        this.endGameSignal(false);
                     });
-              }
-          },
+                }).catch(() => {
+                    this.endGameSignal(false);
+                });
+            }
+        },
 
-          //receive the emitted serie id
-          selectSerieId: function(id){
-            this.selectedSerie = id;
-          },
+        //receive the emitted serie id
+        selectSerieId: function(id){
 
-          //save the data needed to resume a game later
-          save: function(){
+          this.selectedSerie = id;
+        },
+
+        //save the data needed to resume a game later
+        save: function(){
+
             let save = JSON.stringify({
                 state: this.state,
                 tileProvider: this.tileProvider,
@@ -430,10 +421,11 @@
                 message: 'La partie a été sauvegardée.',
                 type: 'success'
             });
-          },
+        },
 
-          //get the local stored data and resume the interval if its needed 
-          getSave: function(){
+        //get the local stored data and resume the interval if its needed 
+        getSave: function(){
+
             let $this = this;
             let save = localStorage.getItem('save');
             let dataArray = Object.entries(JSON.parse(save))
@@ -442,60 +434,56 @@
             }
             if(this.time > 0 && !this.resultTexte){
                 this.interval = setInterval(function(){
-                      if ($this.time > 0){
-                          $this.time --;
-                      }
-                      if ($this.time == 40){
+                    if ($this.time > 0){
+                        $this.time --;
+                    }
+                    if ($this.time == 40){
                         $this.multiplier = 2;
                         $this.color = "orange"
-                      }
-                      else if ($this.time == 20){
+                    }
+                    else if ($this.time == 20){
                         $this.multiplier = 1;
                         $this.color = "#F56C6C"
-                      }
-                      else if ($this.time == 0){
+                    }
+                    else if ($this.time == 0){
                         $this.multiplier = 0;
-                      }
-
-                  }, 1000);
+                    }
+                }, 1000);
             }
+        },
 
-          },
+        //send the endgame signal to the api and remove the saved game
+        // in : true if sending score else false
+        endGameSignal: function(saveScore){  
 
-          //send the endgame signal to the api and remove the saved game
-          // in : true if sending score else false
-          endGameSignal: function(saveScore){  
+            localStorage.removeItem("save");
+            let $this = this;
+            this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
+            {
+                score: $this.score,
+                saveScore: saveScore
+            })
+            .then((response) => {
+            });
+            this.backToDemo();
+        },
 
-              localStorage.removeItem("save");
-              let $this = this;
-              this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
-              {
-                  score: $this.score,
-                  saveScore: saveScore
-              })
-              .then((response) => {
-              });
-              this.backToDemo();
-          },
-
-          backToDemo: function(){
-              this.state = "demo";
-              this.zoom = 13;
-              this.center = L.latLng(48.69333, 6.18324);
-              this.found = false;
-              this.compteur=0;
-              this.circles = []; 
-              this.texte= "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.";
-              this.texte2= "Essaye donc!";
-              this.difficulty= 0;
-              this.resultTexte= "";
-              this.currentPicture = "1.jpg"
-              clearInterval(this.interval);
-          }
-
+        backToDemo: function(){
+            this.state = "demo";
+            this.zoom = 13;
+            this.center = L.latLng(48.69333, 6.18324);
+            this.found = false;
+            this.compteur=0;
+            this.circles = []; 
+            this.texte= "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.";
+            this.texte2= "Essaye donc!";
+            this.difficulty= 0;
+            this.resultTexte= "";
+            this.currentPicture = "1.jpg"
+            clearInterval(this.interval);
         }
-        
     }
+}
 </script>
 
 <style>
@@ -507,17 +495,28 @@
     }
 
     .el-row{
-      box-shadow: 10px 10px 10px -10px #000000;
-    background-color: #ADD19E;
-    padding-bottom: 1em;}
+        box-shadow: 10px 10px 10px -10px #000000;
+        background-color: #ADD19E;
+        padding-bottom: 1em;*
+    }
 </style>
     
 <style scoped>
 
-  .nameInput{
-    max-width: 30%;
-    margin-right: 1em;
-  }
+    .title{
+        font-weight: 100;
+        line-height: 20px;
+        font-size: 20px;
+    }
+
+    .icon{
+        width: 20px;
+    }
+
+    .nameInput{
+        max-width: 30%;
+        margin-right: 1em;
+    }
 
     .vue2leaflet-map{
         height:400px;        
@@ -543,8 +542,8 @@
     }
 
     .el-card{
-      max-width: 20vw;
-      margin: 1em;
+        max-width: 20vw;
+        margin: 1em;
     }
 
     #img{
@@ -561,110 +560,109 @@
         width: 50%;        
     }
 
-     .center{
+    .center{
         padding: 1em;
         text-align:center;
         font-size: 1.5em;
     }
 
     .gameInterface{
-      margin-top: 1em;
-      text-align: center;
-      display:flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-evenly;
-
+        margin-top: 1em;
+        text-align: center;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
     }
 
     .el-header{
-      display:flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      background-color: #ADD19E;
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background-color: #ADD19E;
     }
 
     .header-left{
-      width: 40%;
-      text-align: center;
+        width: 40%;
+        text-align: center;
     }
 
     .header-right{
-      width:60%;
-      text-align: right;
+        width:60%;
+        text-align: right;
     }
 
     .progressBar{
         display:none;
-      }
+    }
 
-  @media screen and (max-width: 1000px) {
+    @media screen and (max-width: 1000px) {
 
-      .difficultyContainer{
-          flex-direction: column;
-      }
+        .difficultyContainer{
+            flex-direction: column;
+        }
 
-      .el-card{
-        max-width: 100%;
-      }
-
-      .nameInput{
+        .el-card{
           max-width: 100%;
-          margin-bottom: 1em;
-      }
+        }
 
-      .mapAndPictureContainer{
-          flex-direction:column;
-      }
+        .nameInput{
+            max-width: 100%;
+            margin-bottom: 1em;
+        }
 
-      #img{
-        width:100%;
-      }
+        .mapAndPictureContainer{
+            flex-direction:column;
+        }
 
-      .vue2leaflet-map{
-          width: 100%;
-          margin:0;
-          padding: 0;
-          height:200px;
-      }
+        #img{
+            width:100%;
+        }
 
-      .gameInterface{
-          flex-direction: column-reverse;
-      }
-  
-      .el-header{
-          flex-direction:column-reverse;
-          height: 100px!important;
-      }
+        .vue2leaflet-map{
+            width: 100%;
+            margin:0;
+            padding: 0;
+            height:200px;
+        }
 
-      .header-left{
-          padding-top: 1em;
-          width:100%;
-      }
+        .gameInterface{
+            flex-direction: column-reverse;
+        }
+    
+        .el-header{
+            flex-direction:column-reverse;
+            height: 100px!important;
+        }
 
-      .header-right{
-        width: 100%;
-      }
+        .header-left{
+            padding-top: 1em;
+            width:100%;
+        }
 
-      .progressCircle{
-        display:none;
-      }
+        .header-right{
+            width: 100%;
+        }
 
-      .progressBar{
-        display:initial;
-        width: 100%;
-        order: 1;
-        padding-bottom:0.5em;
-      }
+        .progressCircle{
+            display:none;
+        }
 
-      .timerAndText{
-        width: 100%;
-      }
+        .progressBar{
+            display:initial;
+            width: 100%;
+            order: 1;
+            padding-bottom:0.5em;
+        }
 
-      .actionButton{
-        padding-top:1em;
-      }
-  }
+        .timerAndText{
+            width: 100%;
+        }
+
+        .actionButton{
+            padding-top:1em;
+        }
+    }
 
 </style>
