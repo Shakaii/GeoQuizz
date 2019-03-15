@@ -24,3 +24,10 @@
 + `Back Office` <https://wireframe.cc/K5CdrH>
   
   The Back Office will allow users to create and edit series and import photo from the app or from the computer
+  
+## Demos du jeu
+
++ `démo jouable en pur javascript` <http://debaser.fr/geoquiz/1>
++ `jeu jouable en full vueJs` <http://debaser.fr/geoquiz/2>
++ `nouvelles features (difficultée, sauvegarde, etc...)` <http://debaser.fr/geoquiz/3>
++ `améliorations css` <http://debaser.fr/geoquiz/4>
