@@ -6,31 +6,38 @@
                 <Label class="title" text="GeoQuizz Mobile"  col="1"/>
             </GridLayout>
         </ActionBar>
-        <RadSideDrawer  ref="drawer">
+       
+        <RadSideDrawer ref="drawer">
          
+        
             <StackLayout  ~drawerContent backgroundColor="#ffffff">
-                <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Series"/>
-                
-                    <Label v-for='serie in seriesInfo' class="drawer-item" @tap="current =serie._links.self.href;$refs.drawer.nativeView.closeDrawer()" :text='serie.ville'/>
-                
+                <ScrollView >
+                    <StackLayout>
+                    <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Series"/>
+                 
+                    <Label v-for='serie in seriesInfo' class="drawer-item" @tap="current = 1;searchSerie(serie._links.self.href);$refs.drawer.nativeView.closeDrawer()" :text='serie.ville'/>
+                    </StackLayout>
+                 </ScrollView >
              
             </StackLayout>
-           
             <GridLayout ~mainContent columns="*" rows="*">
                 <Label v-show="current == 0" class="message" :text="msg" col="0" row="0"/>
-                <Camera v-show="current == 1" ></Camera>
+                <Serie v-show="current == 1" ></Serie>
           
             </GridLayout>
+            
         </RadSideDrawer>
+      
+        
     </Page>
 </template>
 
 <script>
-import Camera from './Camera.vue';
+import Serie from './Serie.vue';
   export default {
       name: 'App',
       components: {
-          Camera,
+          Serie,
          
       },
 
@@ -39,6 +46,7 @@ import Camera from './Camera.vue';
         msg: 'Bienvenue sur GeoQuizz Mobile!',
         current: "",
         seriesInfo:"",
+        serieInfo:"",
       }
     },
     methods:{
@@ -50,6 +58,15 @@ import Camera from './Camera.vue';
                 console.log(error);             
                 this.errored = true; 
             });
+        },
+        searchSerie(link){
+             this.axios
+                .get(link)
+                .then(response => (this.serieInfo = response.data.id))         
+                .catch(error => {
+                console.log(error);             
+                this.errored = true; 
+            }); 
         }
     },
      created:function() {
