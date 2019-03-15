@@ -6,14 +6,14 @@
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         </head>
         <el-header>
-                  <div v-if="state != 'inGame'">
+                  <div class="header-left" v-if="state != 'inGame'">
                       GeoQuizz
                   </div>
                   <div class="header-left" v-if="state=='inGame'">
-                    {{serieName}} ( photo {{currentPictureIndex}} / {{photos.length}} )<br>
+                    <b>{{serieName}}</b> : {{currentPictureIndex}} / {{photos.length}}<br>
                   </div>
-                  <div class="header-right" v-if="state == 'inGame'">
-                    <el-button type="primary" plain @click="save">Sauvegarder</el-button>
+                  <div class="header-right" v-if="state == 'inGame' || state =='chosingSerie'">
+                    <el-button type="primary" plain v-if="state == 'inGame'" @click="save">Sauvegarder</el-button>
                     <el-button type="primary" plain  @click="backToDemo" >Quitter</el-button>
                   </div>
         </el-header>
@@ -68,13 +68,15 @@
                     High-Score de la série : 0 / {{maxScore}}
                 </div>
                 <div class="timerAndText">
-                    <el-progress v-if="!resultTexte" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
+                    <el-progress v-if="!resultTexte" class="progressCircle" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
+                    <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" show-text="false">{{time}} secondes restantes</el-progress>
                     {{resultTexte}}
                 </div>
 
                 
-                <div>
-                    <el-button type="primary" plain @click="nextPicture">Photo suivante</el-button><br><br>
+                <div class="actionButton">
+                    <el-button type="primary" v-if="currentPictureIndex == photos.length"  :disabled="!resultTexte" plain @click="nextPicture">Fin</el-button>
+                    <el-button type="primary" v-if="currentPictureIndex < photos.length"  :disabled="!resultTexte" plain @click="nextPicture">Photo suivante</el-button><br><br>
                 </div>
             </div>
 
@@ -320,6 +322,7 @@
           },
 
           //switch to the next picture and set the interval for time gestion
+          //if it's the last picture, prompt a message to save the score or not
           nextPicture: function(){
               if (this.photos[this.currentPictureIndex]){
                   
@@ -367,8 +370,20 @@
 
                   }, 1000);
               }else{
-                  this.endGameSignal();
-                  alert("Série terminée avec un score de " + this.score + " sur " + this.maxScore);
+                  
+                  this.$confirm("Série terminée avec un score de " + this.score + " sur " + this.maxScore + ". Voulez vous enregistrer votre score ?" , 'Pas mal !', {
+                      confirmButtonText: 'Enregistrer mon score',
+                      cancelButtonText: 'Quitter',
+                      type: 'warning'
+                    }).then(() => {
+                      this.endGameSignal(true);
+                      this.$message({
+                        type: 'success',
+                        message: 'Score enregistré'
+                      });
+                    }).catch(() => {
+                        this.endGameSignal(false);
+                    });
               }
           },
 
@@ -411,7 +426,10 @@
 
             localStorage.setItem('save', save);
             this.gameSaved = true;
-            alert("partie sauvegardée");
+            this.$message({
+                message: 'La partie a été sauvegardée.',
+                type: 'success'
+            });
           },
 
           //get the local stored data and resume the interval if its needed 
@@ -445,17 +463,19 @@
           },
 
           //send the endgame signal to the api and remove the saved game
-          endGameSignal: function(){  
+          // in : true if sending score else false
+          endGameSignal: function(saveScore){  
 
               localStorage.removeItem("save");
               let $this = this;
               this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
               {
                   score: $this.score,
+                  saveScore: saveScore
               })
               .then((response) => {
-                console.log("partie finie et envoyée au serveur");
               });
+              this.backToDemo();
           },
 
           backToDemo: function(){
@@ -574,5 +594,77 @@
       width:60%;
       text-align: right;
     }
+
+    .progressBar{
+        display:none;
+      }
+
+  @media screen and (max-width: 1000px) {
+
+      .difficultyContainer{
+          flex-direction: column;
+      }
+
+      .el-card{
+        max-width: 100%;
+      }
+
+      .nameInput{
+          max-width: 100%;
+          margin-bottom: 1em;
+      }
+
+      .mapAndPictureContainer{
+          flex-direction:column;
+      }
+
+      #img{
+        width:100%;
+      }
+
+      .vue2leaflet-map{
+          width: 100%;
+          margin:0;
+          padding: 0;
+          height:200px;
+      }
+
+      .gameInterface{
+          flex-direction: column-reverse;
+      }
+  
+      .el-header{
+          flex-direction:column-reverse;
+          height: 100px!important;
+      }
+
+      .header-left{
+          padding-top: 1em;
+          width:100%;
+      }
+
+      .header-right{
+        width: 100%;
+      }
+
+      .progressCircle{
+        display:none;
+      }
+
+      .progressBar{
+        display:initial;
+        width: 100%;
+        order: 1;
+        padding-bottom:0.5em;
+      }
+
+      .timerAndText{
+        width: 100%;
+      }
+
+      .actionButton{
+        padding-top:1em;
+      }
+  }
 
 </style>
