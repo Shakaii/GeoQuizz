@@ -21,9 +21,9 @@
 
         methods: {
             retrieveSeries() {
-                this.axios.get('http://localhost:8081/office/series')
+                this.axios.get('http://localhost:8083/player/serie')
                 .then((response) => {
-                    this.series = response.data._embedded.series
+                    this.series = response.data;
                 });
             },
             selectSerie(ville){
@@ -35,49 +35,14 @@
         },
         created: function() {
             this.retrieveSeries()
-            this.series = 
+           /* this.series = 
                 [
                     {
                         id: 123,
                         ville: "Nancy"
                     },
-                    {
-                      id: 234,
-                      ville: "Paris"
-                    },
-                    {
-                        id: 345,
-                        ville: "Metz"
-                    },
-                    {
-                        id: 456,
-                        ville: "Nancy by night"
-                    },
-                    {
-                        id: 567,
-                        ville: "Monuments de Paris"
-                    },
-                    {
-                        id: 678,
-                        ville: "Laxou"
-                    },
-                    {
-                        id:789,
-                        ville: "Villers-lès-Nancy"
-                    },
-                    {
-                        id: 890,
-                        ville: "PAM"
-                    },
-                    {
-                        id: 901,
-                        ville: "Coin pommé"
-                    },
-                    {
-                        id: 110,
-                        ville: "Une ville"
-                    }
                 ]
+            */
         }
     }
 </script>

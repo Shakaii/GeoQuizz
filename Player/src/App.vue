@@ -283,20 +283,27 @@
             this.texte = "";
             this.texte2 = "";
 
-            this.axios.post('http://localhost:8081/game/new?id=' + $this.selectedSerie, 
+            this.axios.post('http://localhost:8083/game/new?serie=' + $this.selectedSerie, 
             {
                 username: $this.username,
-                difficulty: $this.difficulty
+                difficulty: $this.difficulty,
+                status: 1
             })
             .then((response) => {
-                $this.token = response.data._embedded.token;
-                $this.axios.get('http://localhost:8081/game/' + serieId + '?token=' + $this.token )
+
+                $this.token = response.data.token;
+                $this.gameId = response.data.id;
+                $this.axios.get('http://localhost:8083/game/' + response.data.id + '?token=' + $this.token )
                 .then((response) => {
-                    $this.photos = response.data._embedded.photos;
-                    this.maxScore = this.photos.length * 20;
-                    this.distanceD = response.data._embedded.distance
-                    this.zoom = response.data._embedded.zoom
-                    this.center = response.data._embedded.center
+                    $this.photos = response.data.photos;
+                    $this.maxScore = $his.photos.length * 20;
+                    $this.distanceD = response.data.dist;
+                    $this.zoom = response.data.zoom;
+                    $this.center = L.latLng(response.data.x,response.data.y);
+                    $this.score = 0;
+                    $this.serieName = response.data.ville;
+                    $this.currentPictureIndex = 0;
+                  
                     $this.nextPicture();
                 });
             });
@@ -458,8 +465,9 @@
 
             localStorage.removeItem("save");
             let $this = this;
-            this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
+            this.axios.put('http://localhost:8083/game/'+ $this.gameId +'/result/?token=' + $this.token,
             {
+                state: 2,
                 score: $this.score,
                 saveScore: saveScore
             })
