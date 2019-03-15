@@ -301,7 +301,7 @@
                 });
             });
 
-            this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] }]
+            this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] },{ src: "6.jpg", pos: [48.6907346,6.174169] }, {src: "7.jpg", pos: [48.6919326,6.1862249]}]
             this.serieName = "Nancy"
             this.maxScore = this.photos.length * 20;
             this.distanceD = 100;
