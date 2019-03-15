@@ -1,6 +1,9 @@
 package geoquizz.backoffice.bundary;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,16 +12,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import geoquizz.backoffice.storage.StorageService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -28,6 +31,10 @@ import geoquizz.backoffice.entity.Serie;
 import geoquizz.backoffice.exception.NotFound;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.activation.FileTypeMap;
+import javax.activation.MimetypesFileTypeMap;
+import javax.imageio.ImageIO;
 
 @RestController
 @RequestMapping(value="/office", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -107,12 +114,27 @@ public class SerieRepresentation {
                 }).orElseThrow ( () -> new NotFound("Serie inexistante"));
     }
 
+    @GetMapping(value = "/files", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@RequestParam("name") String name) throws Exception {
+
+            ClassPathResource imgFile = new ClassPathResource("images/" + name + ".jpg");
+            Path path = Paths.get("src/main/resources/images/" + name);
+            File f = new File(path.toString());
+            byte[] bytes = Files.readAllBytes(path);
+            //MediaType m = new MediaType(new MimetypesFileTypeMap().getContentType(f));
+
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.parseMediaType(new MimetypesFileTypeMap().getContentType(f)))
+                    .body(bytes);
+    }
+
     @PostMapping(value = "/file")
     public String upFile(@RequestParam("file") MultipartFile file,
                          RedirectAttributes redirectAttributes) {
         try {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get("./files/" + file.getOriginalFilename());
+            Path path = Paths.get("src/main/resources/images/" + file.getOriginalFilename());
             Files.write(path, bytes);
         } catch(IOException e) {
             e.printStackTrace();
