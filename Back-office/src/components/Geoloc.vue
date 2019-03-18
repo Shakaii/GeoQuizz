@@ -1,8 +1,8 @@
 <template>
-<el-row type="">
+<el-row v-if="active < 3">
     <el-col>
-    <img :src="this.src + this.files[this.active]">
-    <el-button @click="nextImage" :disabled="latlng == null" icon="el-icon-arrow-right">Photo suivante</el-button>
+            <img :src="this.src + this.files[this.active]">
+            <el-button @click="nextImage" :disabled="latlng == null" icon="el-icon-arrow-right">Photo suivante</el-button>
     <div >
             <l-map @click="demoClick"  :zoom="zoom" :center="center">
                 <l-marker v-if="this.latlng" :lat-lng="this.latlng"></l-marker>
@@ -29,16 +29,17 @@ export default {
                   attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                   url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 },
-            zoom:13,
+            zoom:10,
             center: L.latLng(48.69333, 6.18324),
             lat: null,
             lng: null,
             latlng: null,
-            src: "http://localhost:8081/office/files/?name="
+            src: "https://a8b10422.ngrok.io/office/files/?name=",
         }
     },
     props: {
         files: Array,
+        addImg: Function
     },
     components: {
         LMap,
@@ -53,8 +54,17 @@ export default {
                 console.log(e)
       },
         nextImage() {
+            //construction de l'element photo pour ajout dans un tableau et appel POST pour creer des photos
+            this.addImg({
+                dsc: "rien",
+                url: this.src + this.files[this.active],
+                x: this.lat,
+                y: this.lng
+            })
+            console.log(this.images)
             this.latlng = null
-             if (this.active++ < this.imgs.length) this.active = 0;
+            this.active++
+             //if (this.active++ < this.imgs.length) this.active = 0;
         }
     },
 }
@@ -66,7 +76,7 @@ export default {
 }
 .vue2leaflet-map{
         height:500px;        
-        width:50%;
+        width:100%;
         margin: 0
     }
     .cont{
