@@ -24,7 +24,9 @@
                 this.axios.get('http://localhost:8083/player/serie')
                 .then((response) => {
                     this.series = response.data;
-                });
+                }).catch((err) => {
+                $this.$message.error("Erreur lors de la récupération des séries. Réessayez plus tard : " + err);
+            });;
             },
             selectSerie(ville){
                 this.selectedSerie = ville
@@ -35,14 +37,6 @@
         },
         created: function() {
             this.retrieveSeries()
-           /* this.series = 
-                [
-                    {
-                        id: 123,
-                        ville: "Nancy"
-                    },
-                ]
-            */
         }
     }
 </script>
