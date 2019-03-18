@@ -36,7 +36,7 @@
                         </WrapLayout>
                      
                     </ScrollView>
-                    <Button v-show="images.length >=1" text="Envoyer les photos prises"  />
+                    <Button v-show="images.length >=1" @tap="upPhoto" text="Envoyer les photos prises"  />
                     <ScrollView orientation="horizontal">
                         <WrapLayout>
                             <Image v-for="ima in seriePhoto" :src="ima.url" width="150" height="150" />
@@ -55,10 +55,12 @@
 
 <script>
     import * as camera from "nativescript-camera";
-var geolocation = require("nativescript-geolocation");
+const geolocation = require("nativescript-geolocation");
+const imageSourceModule = require("tns-core-modules/image-source");
     import {
         Image
     } from "tns-core-modules/ui/image";
+import { error } from 'tns-core-modules/trace/trace';
     
     export default {
         name: 'App',
@@ -140,12 +142,23 @@ var geolocation = require("nativescript-geolocation");
                 });
             },
             upPhoto(){
+                
                 this.images.forEach(image => {
+
+                    const source = new imageSourceModule.ImageSource();
+                            source.fromAsset(image)
+                            .then((imageSource) => {
+                                imageSource.toBase64String("png");
+                            }).catch((err) => {
+                                    console.log("Error -> " + err.message);
+                        });
+
                      this.axios
                     .post("https://a8b10422.ngrok.io/office/series/"+this.serieId+"/photos",image ,{ headers: {
-                        'Content-type': 'application/x-www-form-urlencoded', }
+                        'Content-type': 'multipart/form-data', }
                     }) 
-                    .then(response => (this.photoName = response.data.photos))
+                    .then(response => (this.photoName = response.data.name,console.log(response)).
+                    catch(err => console.log(error)))
                     ;
                     
                 });
@@ -186,7 +199,7 @@ var geolocation = require("nativescript-geolocation");
 
     .drawer-header {
         padding: 50 16 16 16;
-        margin-bottom: 16;
+        margin-bottom: 16;  
         background-color: teal;
         color: #ffffff;
         font-size: 24;
