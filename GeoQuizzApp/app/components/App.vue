@@ -22,20 +22,22 @@
             </StackLayout>
             <GridLayout ~mainContent columns="*" rows="*">
                 <Label v-show="current == 0" class="message" :text="msg" col="0" row="0"/>
-                <label v-show="current == 1" class="message" :text="serieInfo" col="0" row="0"/>
+                
                 <StackLayout v-show="current == 1">
-                    <Button text="Take Picture" @tap="takePicture" />
-                    <Button text="Choose Picture" @tap="selectPicture" />
-                        <WrapLayout>
-                            <Image v-for="img in images" :src="img.src" width="75" height="75" />
-                        </WrapLayout>
-                </StackLayout>
-                <StackLayout v-show="current == 1">
-                  
+                    <label class="message" :text="serieInfo" col="0" row="0"/>
+                    <Button text="Prendre une photo" @tap="takePicture" />
+                    <ScrollView orientation="horizontal">
+                        <WrapLayout>                             
+                            <Image v-for="img in images" :src="img.src" width="150" height="150" />                            
+                        </WrapLayout> 
+                        </ScrollView >
+                        <ScrollView orientation="horizontal">
                         <WrapLayout>
                             <Image v-for="ima in seriePhoto" :src="ima.url" width="150" height="150" />
                         </WrapLayout>
+                        </ScrollView >
                 </StackLayout>
+            
           
             </GridLayout>
             
