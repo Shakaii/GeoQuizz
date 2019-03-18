@@ -422,3 +422,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/vue,java,maven,macos,linux,vuejs,gradle,cordova,eclipse,windows,netbeans,intellij,sublimetext,nativescript,intellij+all,visualstudiocode
+API/backoffice/src/main/resources/images/
