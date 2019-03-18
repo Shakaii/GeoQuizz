@@ -68,8 +68,6 @@ export default {
       demoClick(e) {
                 this.lat = e.latlng.lat
                 this.lng = e.latlng.lng
-                console.log(this.lat)
-                console.log(this.lng)
       },
       createSerie() {
         let rt = this.$router
@@ -80,7 +78,6 @@ export default {
             lng: this.lng
         })
         .then((response) => {
-            console.log(response.data);
             this.$router.push("/addPhotos/"+response.data.id)
         })
         .catch(function (error) {
