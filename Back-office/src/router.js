@@ -19,9 +19,10 @@ export default new Router({
       component: CreateSerie
     },
     {
-      path: '/addPhotos',
+      path: '/addPhotos/:idSerie',
       name: 'add photos',
-      component: AddImage
+      component: AddImage,
+      props: true,
     },
     {
       path: '/about',
