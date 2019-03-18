@@ -24,7 +24,7 @@
     </div>
     <div v-show="active == 2">
         <el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
-        <el-button  style="margin-top: 12px;" @click="next">Ajouter des photos</el-button>
+        <el-button  style="margin-top: 12px;" @click="createSerie">Ajouter des photos</el-button>
         <router-link to="/"><el-button  style="margin-top: 12px;" @click="createSerie">Terminer</el-button></router-link>
     </div>
 </div>
@@ -49,7 +49,8 @@ export default {
             zoom:13,
             center: L.latLng(48.69333, 6.18324),
             lat: null,
-            lng: null
+            lng: null,
+            imgUrl: ""
         }
     },
     components: {
@@ -71,6 +72,7 @@ export default {
                 console.log(this.lng)
       },
       createSerie() {
+        let rt = this.$router
         this.axios.post('http://localhost:8081/office/series', {
             ville: this.name,
             dist: 3,
@@ -79,7 +81,7 @@ export default {
         })
         .then((response) => {
             console.log(response.data);
-            this.series.push(response.data)
+            this.$router.push("/addPhotos/"+response.data.id)
         })
         .catch(function (error) {
             console.log(error);
