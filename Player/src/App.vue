@@ -13,7 +13,7 @@
             <div class="header-left" v-if="state=='inGame'">
                 <b>{{serieName}}</b> : {{currentPictureIndex}} / {{photos.length}}<br>
             </div>
-            <div class="header-right" v-if="state == 'inGame' || state =='chosingSerie'">
+            <div class="header-right" v-if="state == 'inGame' || state =='chosingSerie' || state == 'score'">
                 <el-button type="primary" plain v-if="state == 'inGame'" @click="save">Sauvegarder</el-button>
                 <el-button type="primary" plain  @click="backToDemo" >Quitter</el-button>
             </div>
@@ -36,20 +36,20 @@
             </div>
 
             <div class="difficultyContainer" v-if="state == 'chosingSerie'">
-                <el-card v-bind:shadow="button1">
-                    <el-button type="primary" plain @click="difficulty = 0; button1= 'always'; button2= 'hover'; button3='hover'" >Parisien</el-button>
+                <el-card v-bind:class="{selected: (button1 == 'always')}" v-bind:shadow="button1">
+                    <el-button type="primary"  plain @click="difficulty = 0; button1= 'always'; button2= 'hover'; button3='hover'" >Parisien</el-button>
                     <br><br>
-                    Vous partez en vacance tous les ans au même endroit.
+                    <span class="green">60 secondes pour trouver l'endroit.</span><hr><span class="green">Zone à trouver plus grande.</span>
                 </el-card>
-                <el-card v-bind:shadow="button2">
-                    <el-button type="primary" plain @click="difficulty = 1; button2= 'always'; button1= 'hover'; button3='hover'" >Touriste</el-button>
+                <el-card v-bind:class="{selected: (button2 == 'always')}" v-bind:shadow="button2">
+                    <el-button type="primary"  plain @click="difficulty = 1; button2= 'always'; button1= 'hover'; button3='hover'" >Touriste</el-button>
                     <br><br>
-                    Vous vous arrêtez à chaques station service pour admirer la carte de la région.
+                    <span class="orange">40 secondes pour trouver l'endroit.</span><hr><span class="green">Score multiplié par 2.</span>
                 </el-card>
-                <el-card v-bind:shadow="button3">
+                <el-card v-bind:class="{selected: (button3 == 'always')}" v-bind:shadow="button3">
                     <el-button type="primary" plain @click="difficulty = 2; button3= 'always'; button2= 'hover'; button1='hover'" >Guide du routard</el-button>
                     <br><br>
-                    Vous avez laissé des avis sur la page google de tous les restaurants.
+                    <span class="red">20 secondes pour trouver l'endroit.</span><hr><span class="red">Zone à trouver plus petite.</span><hr>  <span class="green">Score multiplié par 3.</span>
                 </el-card>
             </div>
 
@@ -60,13 +60,14 @@
 
             <div class="center" v-if="state == 'demo'">
                 <el-button type="primary" plain  @click="showSeries" >Choisir une série</el-button> 
-                <el-button type="primary" v-if="gameSaved" plain  @click="getSave" >Reprendre la partie sauvegardée</el-button> 
+                <el-button type="primary" v-if="gameSaved" plain  @click="getSave" >Reprendre la partie sauvegardée</el-button>
+                <el-button type="primary" plain  @click="showScore" >Voir les scores</el-button>  
             </div>
 
             <div v-if="state == 'inGame'" class="gameInterface">
                 <div class="score">
                     Votre Score : {{score}} / {{maxCurrentScore}}<br>
-                    High-Score de la série : 0 / {{maxScore}}
+                    High-Score de la série : {{bestScore}} / {{maxScore}}
                 </div>
                 <div class="timerAndText">
                     <el-progress v-if="!resultTexte" class="progressCircle" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
@@ -78,6 +79,9 @@
                     <el-button type="primary" v-if="currentPictureIndex < photos.length"  :disabled="!resultTexte" plain @click="nextPicture">Photo suivante</el-button><br><br>
                 </div>
             </div>
+
+            <Scores v-if="state == 'score'"></Scores>
+
         </body>
     </html>
 </template>
@@ -86,6 +90,7 @@
     import * as Vue2Leaflet from 'vue2-leaflet';
     import { LMap, LTileLayer, LMarker, LCircle} from 'vue2-leaflet';
     import Series from './components/Series.vue';
+    import Scores from './components/Scores.vue';
     
     export default {
         name:"Geoquizz",
@@ -94,7 +99,8 @@
             LTileLayer,
             LMarker,
             LCircle,
-            Series
+            Series,
+            Scores
         },
 
     data(){
@@ -109,15 +115,16 @@
             found : false,
             compteur:0,
             zoom:13,
-            center: L.latLng(48.69333, 6.18324),
+            center: [48.69333, 6.18324],
             circles : [] ,
             texte: "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.",
-            texte2: "Essaye donc!",
+            texte2: "Clique sur la carte pour marquer un endroit !",
             difficulty: 0,
             button1: 'always',
             button2: 'hover',
             button3: 'hover',
-            selectedSerie: "",                username: "",
+            selectedSerie: "",                
+            username: "",
             photos: [],
             currentPicture: "1.jpg",
             currentPictureIndex: 0,
@@ -133,7 +140,8 @@
             maxTime: 60,
             interval: "",
             color: "#67C23A",
-            gameSaved: false
+            gameSaved: false,
+            bestScore: 0
         }
     },
     mounted(){
@@ -174,7 +182,7 @@
                     fillColor: "red",
                     opacity: 0.4
                 });
-                this.texte = "Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise.";
+                this.texte = "Vous avez cliqué à " + (Math.round(distance) - 100) + " mètres de la zone où la photo a été prise.";
                 this.texte2 = "Heuresement, c'est une démo : vous pouvez réessayer autant que vous le voulez!";
             }
       },
@@ -199,6 +207,7 @@
             let pointB = L.latLng(this.pictureCoordonates[0], this.pictureCoordonates[1]);
             let distance = pointA.distanceTo(pointB);
 
+            //affichage des cercles représentants les trois zones
             if (distance < (this.distanceD * 3)){
                 this.circles.push( {
                       radius: this.distanceD,
@@ -230,9 +239,17 @@
 
                 this.score += scoreGain;
 
+                if (difficulty == 1){
+                  scoreGain = scoreGain * 2;
+                }
+                else if (difficulty == 2){
+                  scoreGain = scoregain * 3
+                }
+
                 this.resultTexte = "Bien joué ! Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise. Vous gagnez " + scoreGain + ' points.'
             }
             else{
+                //affichage des cercles représentants les trois zones
                 this.circles.push( {
                       radius: this.distanceD,
                       latLng: this.pictureCoordonates,
@@ -275,6 +292,14 @@
             this.texte2 = ""   
         },
 
+        //change the state of the game for displaying scores
+        showScore: function(){
+
+            this.state = "score";
+            this.texte = "";
+            this.texte2 = ""   
+        },
+
         //request api to start a game and retrieve the pictures
         startGame: function(){
 
@@ -283,33 +308,52 @@
             this.texte = "";
             this.texte2 = "";
 
-            this.axios.post('http://localhost:8081/game/new?id=' + $this.selectedSerie, 
+            this.axios.post('http://localhost:8083/game/new?serie=' + $this.selectedSerie, 
             {
-                username: $this.username,
-                difficulty: $this.difficulty
+                joueur: $this.username,
+                difficulty: $this.difficulty,
+                status: 1
             })
             .then((response) => {
-                $this.token = response.data._embedded.token;
-                $this.axios.get('http://localhost:8081/game/' + serieId + '?token=' + $this.token )
-                .then((response) => {
-                    $this.photos = response.data._embedded.photos;
-                    this.maxScore = this.photos.length * 20;
-                    this.distanceD = response.data._embedded.distance
-                    this.zoom = response.data._embedded.zoom
-                    this.center = response.data._embedded.center
-                    $this.nextPicture();
-                });
-            });
 
-            this.photos = [{ src: "1.jpg", pos: [48.6829,6.16106] },{ src: "2.jpg", pos: [48.68559,6.16104] },{ src: "3.jpg", pos: [48.68891,6.17493] },{ src: "4.jpg", pos: [48.69339,6.18422] },{ src: "5.jpg", pos: [48.66634,6.16687] },{ src: "6.jpg", pos: [48.6907346,6.174169] }, {src: "7.jpg", pos: [48.6919326,6.1862249]}]
-            this.serieName = "Nancy"
-            this.maxScore = this.photos.length * 20;
-            this.distanceD = 100;
-            this.zoom = 13;
-            this.center = L.latLng(48.69333, 6.18324);
-            this.currentPictureIndex = 0;
-            this.score = 0;
-            this.nextPicture();
+                $this.token = response.data.token;
+                $this.gameId = response.data.id;
+                $this.axios.get('http://localhost:8083/game/' + response.data.id + '?token=' + $this.token )
+                .then((response) => {
+                    $this.photos = response.data.photos;
+                    $this.maxScore = $this.photos.length * 20;
+                    $this.distanceD = response.data.dist;
+                    $this.zoom = response.data.zoom;
+                    $this.center = [response.data.x,response.data.y];
+                    $this.score = 0;
+                    $this.serieName = response.data.ville;
+                    $this.currentPictureIndex = 0;
+
+                    //more score if more difficulty            
+                    if ($this.difficulty == 1){
+                        $this.maxScore = $this.maxScore * 2;
+                    }
+                    else if ($this.difficulty == 1){
+                        $this.maxScore = $this.maxScore * 3
+                    }
+
+                    //larger zone for difficulty 0 and smaller for difficulty 2
+                    if ($this.difficulty == 0){
+                        $this.distanceD = $this.distanceD * 1.1;
+                    }
+                    else if ($this.difficulty == 2){
+                        $this.distanceD = $this.distanceD * 0.9
+                    }
+                    $this.getMaxScore();
+                    $this.nextPicture();
+                }).catch((err) => {
+                    $this.backToDemo();
+                    $this.$message.error('Erreur lors de la création de la partie. Réessayez plus tard : : ' + err);
+                });
+            }).catch((err) => {
+                    $this.backToDemo();
+                    $this.$message.error('Erreur lors de la récupération des données de la partie. Réessayez plus tard :  ' + err);
+            });
         },
 
         //switch to the next picture and set the interval for time gestion
@@ -458,29 +502,70 @@
 
             localStorage.removeItem("save");
             let $this = this;
-            this.axios.put('http://localhost:8081/game/'+ $this.token +'/result/',
+            this.axios.put('http://localhost:8083/game/'+ $this.gameId +'/result/?token=' + $this.token,
             {
+                state: 2,
                 score: $this.score,
                 saveScore: saveScore
             })
             .then((response) => {
+                this.$message({
+                    message: 'Le score a été sauvegardé avec succès.',
+                    type: 'success'
+                });
+            })
+            .catch((err) => {
+                $this.$message.error("Erreur lors de l'envoi du score au serveur. Réessayez plus tard :  " + err);
             });
             this.backToDemo();
         },
 
+        //set the state to demo and reset demo
         backToDemo: function(){
             this.state = "demo";
             this.zoom = 13;
-            this.center = L.latLng(48.69333, 6.18324);
+            this.center = [48.69333, 6.18324]; 
             this.found = false;
             this.compteur=0;
             this.circles = []; 
             this.texte= "Bienvenue sur GeoQuizz ! Le but du jeu est de retrouver l'endroit où a été pris la photo.";
-            this.texte2= "Essaye donc!";
+            this.texte2= "Clique sur la carte pour marquer un endroit !";
             this.difficulty= 0;
             this.resultTexte= "";
             this.currentPicture = "1.jpg"
             clearInterval(this.interval);
+        },
+
+        //get the max achieved score for the current series and difficulty
+        getMaxScore: function(){
+            let $this = this;
+            this.axios.get('http://localhost:8083/game/score/')
+            .then((response) => {
+                let scores = response.data
+                let bestScore = 0;
+                for(let scoreIndex = 0; scoreIndex < scores.length; scoreIndex ++){
+                    let score = scores[scoreIndex];
+                    if ( score.ville == $this.serieName && score.score > bestScore && score.difficulty == $this.difficulty){
+                        bestScore = score.score;
+                    }
+                }
+                $this.bestScore = bestScore;
+            })
+            .catch((err) => {
+                $this.$message.error("Erreur lors de la récupération du meilleur score : " + err);
+            });
+        },
+
+        //process the data for display
+        processScore: function(){
+
+            let $this = this;
+            for(let scoreIndex = 0; scoreIndex < $this.scores.length; scoreIndex ++){
+                let score = $this.scores[scoreIndex];
+                if ( score.ville && score.joueur && score.difficulty >= 0 && score.score >= 0 /* && score.saveScore*/){
+                    $this.tableData.push(score);
+                }
+            }
         }
     }
 }
@@ -488,17 +573,23 @@
 
 <style>
 
+    html{
+        width: 100vw;
+    }
+
     body{
         margin : 0;
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         background-color: rgba(0,0,0,0.01);
+        min-height: 100%;
+
+        width: 100vw;
     }
 
     .el-row{
         box-shadow: 10px 10px 10px -10px #000000;
-        background-color: #ADD19E;
-        padding-bottom: 1em;
     }
+
 </style>
     
 <style scoped>
@@ -507,6 +598,7 @@
         font-weight: 100;
         line-height: 20px;
         font-size: 20px;
+        text-shadow: 1px 1px 1px white
     }
 
     .icon{
@@ -521,16 +613,15 @@
     .vue2leaflet-map{
         height:400px;        
         width:60%;
+        box-shadow: 10px 10px 10px -10px #000000;
+        border-bottom-left-radius: 20px;
     }
 
     .mapAndPictureContainer{
         display:flex;
         flex-direction: row;
         justify-content: center;
-        align-items: center;
-        background-color: #ADD19E;
         width: 100vw;
-        box-shadow: 10px 10px 10px -10px #000000;
     }
 
     .difficultyContainer{
@@ -548,11 +639,15 @@
 
     #img{
         width: 40%;
-    }
+        
+    }   
 
     #img img{
         width: 100%;
         height: auto;
+        box-shadow: 10px 10px 10px -10px #000000;
+        border-bottom-right-radius: 5px;
+        
     }
 
     #mapid{
@@ -561,7 +656,7 @@
     }
 
     .center{
-        padding: 1em;
+        padding: 1em 1em 0em 1em;
         text-align:center;
         font-size: 1.5em;
     }
@@ -580,7 +675,7 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: #ADD19E;
+        background-color: #409EFF;
     }
 
     .header-left{
@@ -595,6 +690,29 @@
 
     .progressBar{
         display:none;
+    }
+
+    .green{
+        font-weight: bold;
+        color: #67C23A;
+    }
+
+    .red{
+        font-weight: bold;
+        color: #F56C6C;
+    }
+
+    .orange{
+        font-weight: bold;
+        color: #E6A23C;
+    }
+
+    hr{
+      border-color: white;
+    }
+
+    .selected{
+        background-color: #e6f2f2;
     }
 
     @media screen and (max-width: 1000px) {
@@ -625,6 +743,7 @@
             margin:0;
             padding: 0;
             height:200px;
+            border-bottom-left-radius: 0px;
         }
 
         .gameInterface{
@@ -652,17 +771,25 @@
         .progressBar{
             display:initial;
             width: 100%;
-            order: 1;
+            
             padding-bottom:0.5em;
         }
 
         .timerAndText{
             width: 100%;
+            order: 1;
         }
 
         .actionButton{
             padding-top:1em;
         }
+
+        #img img{
+          border-bottom-right-radius: 0px;
+        }
     }
+
+
+
 
 </style>
