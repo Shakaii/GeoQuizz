@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "nativescript-camera": "^4.2.0",
+    "nativescript-geolocation": "^5.0.0",
     "nativescript-imagepicker": "^6.1.2",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-ui-listview": "^6.0.0",
