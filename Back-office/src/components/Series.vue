@@ -5,7 +5,7 @@
         <serie :fn="retrieveSerie" v-for="serie in series" :name="serie.ville" :id="serie._links.self.href"></serie>
     </el-row>
     <div v-if="serie">
-        <router-link to="/addPhotos/"><el-button icon="el-icon-plus">Ajouter une image</el-button></router-link>
+        <router-link :to=link><el-button icon="el-icon-plus">Ajouter une image</el-button></router-link>
         <el-row type="flex" :gutter="8">
             <display-photos :photos="serie.photos"></display-photos>
         </el-row>
@@ -36,6 +36,11 @@ export default {
   props: {
     
   },
+  computed: {
+    link() {
+      return "/addPhotos/" + this.serie.id
+    }
+  },
   methods: {
     retrieveSeries() {
           this.axios.get('http://localhost:8081/office/series')
@@ -65,9 +70,11 @@ export default {
   created() {
       this.retrieveSeries()
   },
+  /*
   updated() {
     this.retrieveSeries()
   }
+  */
 }
 </script>
 
