@@ -1,31 +1,40 @@
 package geoquizz.backoffice.bundary;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import geoquizz.backoffice.entity.Photo;
 import geoquizz.backoffice.entity.Serie;
 import geoquizz.backoffice.exception.NotFound;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.activation.FileTypeMap;
+import javax.activation.MimetypesFileTypeMap;
+import javax.imageio.ImageIO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -38,6 +47,8 @@ public class SerieRepresentation {
     private final SerieResource sr;
     private final PhotoResource pr;
 
+
+    @Autowired
     public SerieRepresentation(SerieResource sr, PhotoResource pr){
         this.sr=sr;
         this.pr=pr;
@@ -108,6 +119,52 @@ public class SerieRepresentation {
                     pr.save(photo);
                     return new ResponseEntity<>(photo, HttpStatus.CREATED);
                 }).orElseThrow ( () -> new NotFound("Serie inexistante"));
+    }
+
+    @GetMapping(value = "/files", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@RequestParam("name") String name) throws Exception {
+
+            ClassPathResource imgFile = new ClassPathResource("images/" + name + ".jpg");
+            Path path = Paths.get("src/main/resources/images/" + name);
+            File f = new File(path.toString());
+            byte[] bytes = Files.readAllBytes(path);
+            //MediaType m = new MediaType(new MimetypesFileTypeMap().getContentType(f));
+
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.parseMediaType(new MimetypesFileTypeMap().getContentType(f)))
+                    .body(bytes);
+    }
+
+    @PostMapping(value = "/file")
+    public String upFile(@RequestParam("file") MultipartFile file,
+                         RedirectAttributes redirectAttributes) {
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("src/main/resources/images/" + file.getOriginalFilename());
+            Files.write(path, bytes);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully uploaded " + file.getOriginalFilename() + "!");
+
+        return file.getOriginalFilename() +"/";
+    }
+
+    @DeleteMapping(value = "/file")
+    public String delFile(@RequestBody String id,
+                         RedirectAttributes redirectAttributes) {
+        try {
+            Path path = Paths.get("./files/" + id);
+            Files.delete(path);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully deleted " + id + "!");
+
+        return "redirect:/";
     }
 
     @ApiOperation(value = "Modifie la distance voulue (présente dans le body) de la série dont l'id est renseignée. Renvoie la distance")
