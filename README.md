@@ -1,5 +1,13 @@
 # GeoQuizz
 
+## Demos du jeu
+
++ `démo jouable en pur javascript` <http://debaser.fr/geoquiz/1>
++ `jeu jouable en full vueJs` <http://debaser.fr/geoquiz/2>
++ `nouvelles features (difficultée, sauvegarde, etc...)` <http://debaser.fr/geoquiz/3>
++ `améliorations css` <http://debaser.fr/geoquiz/4>
++ `pré implémentation de l'api` <http://debaser.fr/geoquiz/5>
+
 ## Maquettes
 
 + `Homepage` <https://wireframe.cc/KIeWR5>
@@ -20,7 +28,8 @@
   The App that will let people take picture with geolocalization and add them to series
 
 
-
 + `Back Office` <https://wireframe.cc/K5CdrH>
   
   The Back Office will allow users to create and edit series and import photo from the app or from the computer
+  
+
