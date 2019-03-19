@@ -50,6 +50,7 @@ public class PartieRepresentation {
         else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
+    @ApiOperation(value = "Permet de récupérer les parties pour gérer le score.")
     @GetMapping(value = "/score")
     public ResponseEntity<?> getScore() {
         return new ResponseEntity<>(pr.findAll(), HttpStatus.OK);

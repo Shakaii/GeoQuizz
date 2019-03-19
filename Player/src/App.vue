@@ -319,7 +319,6 @@
 
                 $this.token = response.data.token;
                 $this.gameId = response.data.id;
-                console.log($this.gameId);
                 $this.axios.get('http://localhost:8083/game/' + response.data.id + '?token=' + $this.token )
                 .then((response) => {
                     $this.photos = response.data.photos;
@@ -350,11 +349,11 @@
                     $this.nextPicture();
                 }).catch((err) => {
                     $this.backToDemo();
-                    $this.$message.error('Erreur lors de la création de la partie. Réessayez plus tard : : ' + err);
+                    $this.$message.error('Erreur lors de la récupération des données de la partie. Réessayez plus tard : ' + err);
                 });
             }).catch((err) => {
                     $this.backToDemo();
-                    $this.$message.error('Erreur lors de la récupération des données de la partie. Réessayez plus tard :  ' + err);
+                    $this.$message.error('Erreur lors de la création de la partie. Réessayez plus tard :  ' + err);
             });
         },
 

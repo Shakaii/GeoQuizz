@@ -21,9 +21,10 @@
 
         methods: {
             retrieveSeries() {
-                this.axios.get('http://localhost:8083/player/serie')
+                let $this = this;
+                this.axios.get('http://localhost:8083/player/series')
                 .then((response) => {
-                    this.series = response.data;
+                    $this.series = response.data;
                 }).catch((err) => {
                 $this.$message.error("Erreur lors de la récupération des séries. Réessayez plus tard : " + err);
             });;

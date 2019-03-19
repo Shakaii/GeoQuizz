@@ -31,8 +31,8 @@ public class SerieRepresentation {
     }
 
     @ApiOperation(value = "Récupère toutes les séries")
-    @GetMapping(value = "/serie")
-    public ResponseEntity<?> getTest() {
+    @GetMapping(value = "/series")
+    public ResponseEntity<?> getSeries() {
         return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
     }
 
