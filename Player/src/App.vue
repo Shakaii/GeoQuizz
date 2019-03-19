@@ -71,7 +71,7 @@
                 </div>
                 <div class="timerAndText">
                     <el-progress v-if="!resultTexte" class="progressCircle" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
-                    <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" show-text="false">{{time}} secondes restantes</el-progress>
+                    <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" >{{time}} secondes restantes</el-progress>
                     {{resultTexte}}
                 </div>
                 <div class="actionButton">
