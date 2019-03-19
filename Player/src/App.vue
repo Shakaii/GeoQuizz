@@ -141,7 +141,8 @@
             interval: "",
             color: "#67C23A",
             gameSaved: false,
-            bestScore: 0
+            bestScore: 0,
+            gameId: 0
         }
     },
     mounted(){
@@ -318,6 +319,7 @@
 
                 $this.token = response.data.token;
                 $this.gameId = response.data.id;
+                console.log($this.gameId);
                 $this.axios.get('http://localhost:8083/game/' + response.data.id + '?token=' + $this.token )
                 .then((response) => {
                     $this.photos = response.data.photos;
@@ -410,10 +412,6 @@
                     type: 'warning'
                 }).then(() => {
                     this.endGameSignal(true);
-                    this.$message({
-                        type: 'success',
-                        message: 'Score enregistré'
-                    });
                 }).catch(() => {
                     this.endGameSignal(false);
                 });
@@ -502,11 +500,11 @@
 
             localStorage.removeItem("save");
             let $this = this;
-            this.axios.put('http://localhost:8083/game/'+ $this.gameId +'/result/?token=' + $this.token,
+            this.axios.post('http://localhost:8083/game/result/'+ $this.gameId,
             {
-                state: 2,
                 score: $this.score,
-                saveScore: saveScore
+                saveScore: saveScore,
+                token: $this.token
             })
             .then((response) => {
                 this.$message({
