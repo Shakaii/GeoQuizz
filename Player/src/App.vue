@@ -240,10 +240,10 @@
 
                 this.score += scoreGain;
 
-                if (difficulty == 1){
+                if (this.difficulty == 1){
                   scoreGain = scoreGain * 2;
                 }
-                else if (difficulty == 2){
+                else if (this.difficulty == 2){
                   scoreGain = scoregain * 3
                 }
 
@@ -320,33 +320,49 @@
                 $this.token = response.data.token;
                 $this.gameId = response.data.id;
                 $this.axios.get('http://localhost:8083/game/' + response.data.id + '?token=' + $this.token )
-                .then((response) => {
-                    $this.photos = response.data.photos;
-                    $this.maxScore = $this.photos.length * 20;
-                    $this.distanceD = response.data.dist;
-                    $this.zoom = response.data.zoom;
-                    $this.center = [response.data.x,response.data.y];
-                    $this.score = 0;
-                    $this.serieName = response.data.ville;
-                    $this.currentPictureIndex = 0;
+                .then((gameResponse) => {
 
-                    //more score if more difficulty            
-                    if ($this.difficulty == 1){
-                        $this.maxScore = $this.maxScore * 2;
-                    }
-                    else if ($this.difficulty == 1){
-                        $this.maxScore = $this.maxScore * 3
-                    }
+                    this.axios.get('http://localhost:8083/player/serie/' + $this.selectedSerie).then((serieResponse) => {
 
-                    //larger zone for difficulty 0 and smaller for difficulty 2
-                    if ($this.difficulty == 0){
-                        $this.distanceD = $this.distanceD * 1.1;
-                    }
-                    else if ($this.difficulty == 2){
-                        $this.distanceD = $this.distanceD * 0.9
-                    }
-                    $this.getMaxScore();
-                    $this.nextPicture();
+                        $this.photos = gameResponse.data.photos;
+                        $this.maxScore = $this.photos.length * 20;
+                        $this.distanceD = serieResponse.data.dist;
+
+                        //there's a bug with zoom, sometimes api won't send out zoom so we double check here
+                        if (serieResponse.data.zoom){
+                            $this.zoom = serieResponse.data.zoom;
+                        }
+                        else $this.zoom = 13;
+                        
+                        $this.center = [serieResponse.data.x,serieResponse.data.y];
+                        $this.center[0] = serieResponse.data.x
+                        $this.center[1] = serieResponse.data.y
+                        $this.serieName = serieResponse.data.ville;
+                        $this.score = 0;
+                        $this.currentPictureIndex = 0;
+
+                        //more score if more difficulty            
+                        if ($this.difficulty == 1){
+                            $this.maxScore = $this.maxScore * 2;
+                        }
+                        else if ($this.difficulty == 1){
+                            $this.maxScore = $this.maxScore * 3
+                        }
+
+                        //larger zone for difficulty 0 and smaller for difficulty 2
+                        if ($this.difficulty == 0){
+                            $this.distanceD = $this.distanceD * 1.1;
+                        }
+                        else if ($this.difficulty == 2){
+                            $this.distanceD = $this.distanceD * 0.9
+                        }
+                        $this.getMaxScore();
+                        $this.nextPicture();
+                    }).catch((err) => {
+                        $this.backToDemo();
+                        $this.$message.error('Erreur lors de la récupération de la série. Réessayez plus tard : ' + err);
+                    });
+                    
                 }).catch((err) => {
                     $this.backToDemo();
                     $this.$message.error('Erreur lors de la récupération des données de la partie. Réessayez plus tard : ' + err);
@@ -363,8 +379,8 @@
 
             if (this.photos[this.currentPictureIndex]){      
                 this.circles = [];
-                this.currentPicture = this.photos[this.currentPictureIndex].src;
-                this.pictureCoordonates = this.photos[this.currentPictureIndex].pos;
+                this.currentPicture = this.photos[this.currentPictureIndex].url;
+                this.pictureCoordonates = [this.photos[this.currentPictureIndex].x,this.photos[this.currentPictureIndex].y];
                 this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
                 this.currentPictureIndex ++;
                 

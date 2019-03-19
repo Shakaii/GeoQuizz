@@ -7,7 +7,7 @@ latitude: 48.68559
 longitude: 6.16104
 
 3
-latitude: 48.68891x
+latitude: 48.68891
 longitude: 6.17493
 
 4
@@ -30,3 +30,94 @@ longitude: 6.1862249
 latitude: 48.6802006
 longitude: 6.1692646
 
+9
+latitude: 48.6891655
+longitude: 6.1804276
+
+10
+latitude: 48.698987
+longitude: 6.1841661
+
+11
+latitude: 48.6886052
+longitude: 6.1769114
+
+12
+latitude: 48.6860938
+longitude: 6.1920457
+
+
+[
+	{
+		"x": 48.6829,
+		"y": 6.16106,
+		"url": "https://ibb.co/7vBhdvr",
+		"dsc" : "IUT charlemagne"
+	}
+	{
+		"x": 48.68559,
+		"y": 6.16104,
+		"url": "https://ibb.co/8djhJcP",
+		"dsc" : "Supermarché Match Laxou"
+	}
+	{
+		"x": 48.68891,
+		"y": 6.17493,
+		"url": "https://ibb.co/60tzNJQ",
+		"dsc" : "Gare de Nancy"
+	}
+	{
+		"x": 48.6829,
+		"y": 6.18422,
+		"url": "https://ibb.co/PQ4qHVv",
+		"dsc" : "Place Stanislas"
+	}
+	{
+		"x": 48.66634,
+		"y": 6.16687,
+		"url": "https://ibb.co/599M5jw",
+		"dsc" : "Vélodrome"
+	}
+	{
+		"x": 48.6907346,
+		"y": 6.174169,
+		"url": "https://ibb.co/k1YrFyX",
+		"dsc" : "Tour thiers"
+	}
+	{
+		"x": 48.6919326,
+		"y": 6.1862249,
+		"url": "https://ibb.co/RhN65Wk",
+		"dsc" : "Cathédrale de Nancy"
+	}
+	{
+		"x": 48.6802006,
+		"y": 6.1692646,
+		"url": "https://ibb.co/7gsfyY8",
+		"dsc" : "Parc sainte marie"
+	}
+	{
+		"x": 48.6891655,
+		"y": 6.1804276,
+		"url": "https://ibb.co/86hjs3j",
+		"dsc" : "Saint sébastien"
+	}
+	{
+		"x": 48.698987,
+		"y": 6.1841661,
+		"url": "https://ibb.co/tQZksK2",
+		"dsc" : "La pépinière"
+	}
+	{
+		"x": 48.6886052,
+		"y": 6.1769114,
+		"url": "https://ibb.co/Yt03S5d",
+		"dsc" : "Centre congrès"
+	}
+	{
+		"x": 48.6860938,
+		"y": 6.1920457,
+		"url": "https://ibb.co/SnCcDjq",
+		"dsc" : "CHU Nancy"
+	}
+]
