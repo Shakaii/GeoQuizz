@@ -34,7 +34,7 @@ export default {
             lat: null,
             lng: null,
             latlng: null,
-            src: "https://a8b10422.ngrok.io/office/files/?name=",
+            src: "https://cbc0cb8c.ngrok.io/office/files/?name=",
         }
     },
     props: {
