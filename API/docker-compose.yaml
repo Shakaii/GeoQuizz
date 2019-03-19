@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql-db:
+    container_name: mysql-db
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: geoquizz
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+    - "3306:3306"
+    restart: always
+
+  backoffice:
+    restart: always
+    build: ./backoffice
+    working_dir: /backoffice
+    volumes:
+      - ./backoffice:/backoffice
+      - ~/.m2:/root/.m2
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+    command: ./mvnw clean spring-boot:run
+    depends_on:
+      - mysql-db
