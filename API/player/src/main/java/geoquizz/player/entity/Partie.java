@@ -16,7 +16,10 @@ public class Partie {
     private int nb_photos;
     private int status; //0 : creer, 1: en cours, 2: fini
     private int score;
+    private int difficulty; // 0 1 2
     private String joueur;
+    private boolean saveScore; //true false
+    private String ville;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "serie_id", nullable = false)
@@ -68,6 +71,14 @@ public class Partie {
         this.status = status;
     }
 
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public int getScore() {
         return score;
     }
@@ -86,6 +97,18 @@ public class Partie {
 
     public Serie getSerie() {
         return serie;
+    }
+
+    public String getVille(){ return ville; }
+
+    public void setVille(String ville) { this.ville = ville; }
+
+    public void setSaveScore(boolean saveScore) {
+        this.saveScore = saveScore;
+    }
+
+    public boolean getSaveScore() {
+        return saveScore;
     }
 
     public void setSerie(Serie serie) {

@@ -71,7 +71,7 @@
                 </div>
                 <div class="timerAndText">
                     <el-progress v-if="!resultTexte" class="progressCircle" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
-                    <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" show-text="false">{{time}} secondes restantes</el-progress>
+                    <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" >{{time}} secondes restantes</el-progress>
                     {{resultTexte}}
                 </div>
                 <div class="actionButton">
@@ -141,7 +141,8 @@
             interval: "",
             color: "#67C23A",
             gameSaved: false,
-            bestScore: 0
+            bestScore: 0,
+            gameId: 0
         }
     },
     mounted(){
@@ -348,11 +349,11 @@
                     $this.nextPicture();
                 }).catch((err) => {
                     $this.backToDemo();
-                    $this.$message.error('Erreur lors de la création de la partie. Réessayez plus tard : : ' + err);
+                    $this.$message.error('Erreur lors de la récupération des données de la partie. Réessayez plus tard : ' + err);
                 });
             }).catch((err) => {
                     $this.backToDemo();
-                    $this.$message.error('Erreur lors de la récupération des données de la partie. Réessayez plus tard :  ' + err);
+                    $this.$message.error('Erreur lors de la création de la partie. Réessayez plus tard :  ' + err);
             });
         },
 
@@ -410,10 +411,6 @@
                     type: 'warning'
                 }).then(() => {
                     this.endGameSignal(true);
-                    this.$message({
-                        type: 'success',
-                        message: 'Score enregistré'
-                    });
                 }).catch(() => {
                     this.endGameSignal(false);
                 });
@@ -502,11 +499,11 @@
 
             localStorage.removeItem("save");
             let $this = this;
-            this.axios.put('http://localhost:8083/game/'+ $this.gameId +'/result/?token=' + $this.token,
+            this.axios.post('http://localhost:8083/game/result/'+ $this.gameId,
             {
-                state: 2,
                 score: $this.score,
-                saveScore: saveScore
+                saveScore: saveScore,
+                token: $this.token
             })
             .then((response) => {
                 this.$message({

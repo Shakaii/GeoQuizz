@@ -7,6 +7,8 @@
             </el-table-column>
             <el-table-column prop="difficulty" label="Difficulté" sortable >
             </el-table-column>
+            <el-table-column prop="nb_photos" label="Longueur de la série" sortable >
+            </el-table-column>
             <el-table-column prop="score" label="Score" sortable>
             </el-table-column>
         </el-table>
@@ -46,7 +48,7 @@
                 let $this = this;
                 for(let scoreIndex = 0; scoreIndex < $this.scores.length; scoreIndex ++){
                     let score = $this.scores[scoreIndex];
-                    if ( score.ville && score.joueur && score.difficulty >= 0 && score.score >= 0 /* && score.saveScore*/){
+                    if ( score.ville && score.joueur && score.difficulty >= 0 && score.score >= 0 && score.saveScore){
                         let newScore = score;
                         if (score.difficulty == 0) {
                             score.difficulty = "Parisien";

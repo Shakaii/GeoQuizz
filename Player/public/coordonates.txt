@@ -1,0 +1,32 @@
+1
+latitude: 48.6829
+longitude: 6.16106
+
+2
+latitude: 48.68559
+longitude: 6.16104
+
+3
+latitude: 48.68891x
+longitude: 6.17493
+
+4
+latitude: 48.69339
+longitude: 6.18422
+
+5
+latitude: 48.66634
+longitude: 6.16687
+
+6
+latitude: 48.6907346
+longitude: 6.174169
+
+7.
+latitude: 48.6919326
+longitude: 6.1862249
+
+8.
+latitude: 48.6802006
+longitude: 6.1692646
+
