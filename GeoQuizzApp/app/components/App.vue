@@ -9,13 +9,16 @@
        
         <RadSideDrawer ref="drawer">
          
-        
+           
             <StackLayout  ~drawerContent backgroundColor="#ffffff">
                 <ScrollView >
                     <StackLayout>
-                    <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Series"/>
+                    <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Séries"/>
                  
+                    <Label class="drawer-item" @tap="current = 2;$refs.drawer.nativeView.closeDrawer()" text='Créer une nouvelle série'/>
+
                     <Label v-for='serie in seriesInfo' class="drawer-item" @tap="current = 1;searchSerie(serie._links.self.href);$refs.drawer.nativeView.closeDrawer()" :text='serie.ville'/>
+                    
                     </StackLayout>
                  </ScrollView >
              
@@ -38,16 +41,18 @@
                         </ScrollView >
                 </StackLayout>
             
+                <create-serie v-show="current == 2"/>
           
             </GridLayout>
             
         </RadSideDrawer>
-      
+
         
     </Page>
 </template>
 
 <script>
+import CreateSerie from './CreateSerie.vue'
 
 import * as camera from "nativescript-camera";
     import * as imagepicker from "nativescript-imagepicker";
@@ -59,7 +64,7 @@ import * as camera from "nativescript-camera";
   export default {
       name: 'App',
       components: {
-          
+          CreateSerie,
          
       },
 
