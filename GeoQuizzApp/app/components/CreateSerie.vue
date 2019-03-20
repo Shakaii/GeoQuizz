@@ -60,6 +60,7 @@ export default {
     components: {
         
     },
+    props:["token"],
     methods: {
       next() {
         if (this.active++ > 3) this.active = 0;
@@ -69,15 +70,26 @@ export default {
         if (this.active-- < 0) this.active = 0;
       },
       createSerie() {
-        this.axios.post('https://cbc0cb8c.ngrok.io/', {
+     console.log(this.token)
+      
+        this.axios.post('https://cbc0cb8c.ngrok.io/office/series', {
+           
             ville: this.name,
             dist: 3,
             lat: this.lat,
-            lng: this.lng
+            lng: this.lng,
+              
+                    
+        },{
+             headers: {
+              'Authorization': this.token
+            }
         })
         .then((response) => {
             console.log(response.data);
-            this.$router.push("/addPhotos/"+this.images);
+            this.axios.post("https://cbc0cb8c.ngrok.io/office/serie/"+response.data.id+"/photos", {
+                photos: this.images,
+            });
         })
         .catch(function (error) {
             console.log(error);
@@ -134,6 +146,7 @@ export default {
                         console.log("Error requesting permission");
                     });
             },
+         
     }
 }
 </script>

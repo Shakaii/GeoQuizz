@@ -13,7 +13,7 @@
             <StackLayout v-show="current != 0" ~drawerContent backgroundColor="#ffffff">
                 <ScrollView>
                     <StackLayout>
-                    <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Séries"/>
+                    <Label class="drawer-header" @tap="$refs.drawer.nativeView.closeDrawer()" text="Séries"/>
                  
                     <Label class="drawer-item" @tap="current = 2;$refs.drawer.nativeView.closeDrawer()" text='Créer une nouvelle série'/>
 
@@ -36,7 +36,7 @@
 
 
                     <Button text="Prendre une photo" @tap="takePicture" />
-                    <Button text="Importer une photo" @tap="selectPicture" />
+                 
                     <ScrollView orientation="horizontal">
                         <WrapLayout>
                             <Image v-for="img in images" :src="img.src" width="150" height="150" />
@@ -51,7 +51,7 @@
                     </ScrollView>
                 </StackLayout>
             
-                <create-serie v-show="current == 2"/>
+                <create-serie :token=this.token v-show="current == 2"/>
           
             </GridLayout>
 
