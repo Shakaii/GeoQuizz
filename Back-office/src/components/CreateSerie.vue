@@ -80,8 +80,10 @@
                 this.axios.post('http://localhost:8081/office/series', {
                         ville: this.name,
                         dist: 3,
-                        lat: this.lat,
-                        lng: this.lng
+                        x: this.lat,
+                        y: this.lng,
+                        nb_photos: 10,
+                        zoom: 10
                     }, {
                         headers: {
                             'Authorization': token

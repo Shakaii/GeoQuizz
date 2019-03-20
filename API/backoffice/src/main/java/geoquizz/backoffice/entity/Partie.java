@@ -9,7 +9,6 @@ public class Partie {
     @Id
     private String id;
     private String token;
-    private int nb_photos;
     private int status; //0 : creer, 1: en cours, 2: fini
     private int score;
     private String joueur;

@@ -78,7 +78,6 @@
             <artifactId>java-jwt</artifactId>
             <version>3.4.0</version>
         </dependency>
-    </dependencies>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
