@@ -35,4 +35,5 @@ https://trello.com/b/kw2pvLTp/geoquizz
 ### Player
 
 For the player api and interface you'll find another readme with more details in the subfolder Player
+this script http://debaser.fr/GeoQuizZ/database.html will create a series with multiple photos inside for testing purposes
    
