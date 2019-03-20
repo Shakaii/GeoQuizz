@@ -8,6 +8,8 @@
     </StackLayout>
     <StackLayout v-show="active == 1">
         <Label text="Géolocalisation de la série"/>
+        <TextField hint="Latitude" autocorrect="false" v-model="lat" keyboardType="number" class="input input-border"></TextField> 
+        <TextField hint="Longitude" autocorrect="false" v-model="lng" keyboardType="number" class="input input-border"></TextField> 
         <Button text="Prochaine étape" icon="el-icon-arrow-right" @tap="next"/>
         <Button text="Etape précédente" icon="el-icon-arrow-left" @tap="back"/>
     </StackLayout>
@@ -25,6 +27,8 @@
 
 export default {
     name: 'createserie',
+    components: {
+    },
     data() {
         return {    
             active: 0,
@@ -43,26 +47,18 @@ export default {
         }
     },
     components: {
-        /*LMap,
-        LTileLayer,
-        LMarker,*/
+        
     },
     methods: {
       next() {
         if (this.active++ > 2) this.active = 0;
+        console.log(this.lat+" / "+this.lng);
       },
       back() {
         if (this.active-- < 0) this.active = 0;
       },
-      /*demoClick(e) {
-                this.lat = e.latlng.lat
-                this.lng = e.latlng.lng
-                console.log(this.lat)
-                console.log(this.lng)
-      },*/
       createSerie() {
-        let rt = this.$router;
-        this.axios.post('http://localhost:8081/office/series', {
+        this.axios.post('https://cbc0cb8c.ngrok.io/', {
             ville: this.name,
             dist: 3,
             lat: this.lat,
@@ -80,12 +76,4 @@ export default {
 }
 </script>
 <style scoped>
-    .vue2leaflet-map{
-        height:500px;        
-        width:50%;
-    }
-
-    .el-input {
-        width: 50%
-    }
 </style>

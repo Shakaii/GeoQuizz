@@ -29,6 +29,7 @@
                 <StackLayout v-show="current == 1">
                     <label class="message" :text="serieInfo" col="0" row="0"/>
                     <Button text="Prendre une photo" @tap="takePicture" />
+                    <Button text="Importer une photo" @tap="selectPicture" />
                     <ScrollView orientation="horizontal">
                         <WrapLayout>                             
                             <Image v-for="img in images" :src="img.src" width="150" height="150" />                            

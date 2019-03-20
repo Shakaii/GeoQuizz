@@ -29,6 +29,7 @@
     "nativescript-camera": "^4.2.0",
     "nativescript-geolocation": "^5.0.0",
     "nativescript-imagepicker": "^6.1.2",
+    "nativescript-mapbox": "^4.4.1",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-ui-listview": "^6.0.0",
     "nativescript-ui-sidedrawer": "^4.3.0",
