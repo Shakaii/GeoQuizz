@@ -24,3 +24,18 @@ services:
     command: ./mvnw clean spring-boot:run
     depends_on:
       - mysql-db
+
+  player:
+    restart: always
+    build: ../Player/Api/player
+    working_dir: /Player/Api/player
+    volumes:
+      - ../Player/Api/player:/Player/Api/player
+      - ~/.m2:/root/.m2
+    expose:
+      - "8083"
+    ports:
+      - "8083:8083"
+    command: ./mvnw clean spring-boot:run
+    depends_on:
+      - mysql-db
