@@ -7,7 +7,7 @@
       <serie :fn="retrieveSerie" v-for="serie in series" :name="serie.ville" :id="serie._links.self.href"></serie>
     </el-row>
     <div v-if="serie">
-      <el-button @click="del" icon="el-icon-delete">Supprimer la serie</el-button>
+      
       <router-link :to=link>
         <el-button icon="el-icon-plus">Ajouter une image</el-button>
       </router-link>
@@ -62,7 +62,12 @@
           })
       },
       retrieveSerie(link) {
-        this.axios.get(link)
+        let token = this.getCookie("token")
+        this.axios.get(link, {
+            headers: {
+              'Authorization': token
+            }
+          })
           .then((response) => {
             this.serie = response.data
           })
@@ -96,6 +101,11 @@
     created() {
       this.retrieveSeries()
     },
+    mounted() {
+      if(this.getCookie('token') == '') {
+        this.$router.push('/connexion')
+      }
+    }
     /*
     updated() {
       this.retrieveSeries()

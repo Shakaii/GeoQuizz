@@ -13,8 +13,8 @@
                         Mot de passe ou nom d'utilisateur incorrect
                     </el-alert>
                     <el-form-item>
-                        <el-button @click="con" type="primary">Submit</el-button>
-                        <el-button>Reset</el-button>
+                        <el-button @click="con" type="primary">Connexion</el-button>
+                        <el-button @click="insc">Inscription</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -32,12 +32,16 @@
             }
         },
         methods: {
+            insc() {
+                this.$router.push('/inscription')
+            },
             con() {
                 this.axios.post("http://localhost:8081/login", JSON.stringify({
                         username: this.username,
                         password: this.pass
                     }), {
                         headers: {
+                            
                             'Content-Type': 'application/json'
                         }
                     })

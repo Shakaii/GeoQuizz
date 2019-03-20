@@ -5,7 +5,7 @@
         <el-menu-item index="2" @click="toCon">Connexion</el-menu-item>
     </el-menu>
     <el-menu v-show='token != ""' :default-active="activeIndex" mode="horizontal">
-        <el-menu-item index="1">Connected</el-menu-item>
+        <el-menu-item index="1" @click="home">Home</el-menu-item>
         <el-menu-item index="2" @click="disco">Disconnect</el-menu-item>
     </el-menu>
 </div>
@@ -27,6 +27,9 @@ export default {
     methods: {
         toCon() {
             this.$router.push("/connexion")
+        },
+        home() {
+            this.$router.push("/")
         },
         toInsc() {
             this.$router.push("/inscription")

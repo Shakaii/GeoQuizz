@@ -13,8 +13,7 @@
                 <el-input type="password" v-model="passCheck"  autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="createAccount">Submit</el-button>
-                <el-button>Reset</el-button>
+                <el-button type="primary" @click="createAccount">S'inscrire</el-button>
             </el-form-item>
         </el-form>
     </el-card>
