@@ -94,7 +94,8 @@ import CreateSerie from './CreateSerie.vue'
                 geocal: 0,
                 serieId: "",
                 photoName: "",
-                locations: [],
+                lat: [],
+                lon:[],
                 username: "",
                 pass: "",
                 token:"",
@@ -152,7 +153,8 @@ import CreateSerie from './CreateSerie.vue'
                                 /*let watchId = geolocation.watchLocation(
                                      function(loc){
                                           if (loc) {
-                                              console.log("Received location: " + loc);
+                                            
+                                            console.log("Received location: " + loc);
                                           }
                                      }, function(e){
                                               console.log("Error: " + e.message);
@@ -201,11 +203,11 @@ import CreateSerie from './CreateSerie.vue'
             },
             setGeolocation() {
                 let loca = geolocation.getCurrentLocation({
-                    desiredAccuracy: Accuracy.high,
+                    //desiredAccuracy: Accuracy.high,
                     maximumAge: 5000,
                     timeout: 20000
-                })
-                console.log(loca.longitude + " / " + loca.latitude);
+                }).then(response => this.lat.push(response.latitude),this.lon.push(response.longitude))
+             
             },
             auth() {
                 this.axios.post("https://cbc0cb8c.ngrok.io/login", JSON.stringify({

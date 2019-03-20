@@ -1,5 +1,5 @@
 {
-  "name": "side",
+  "name": "Geoquizz",
   "version": "1.0.0",
   "description": "A native application built with NativeScript-Vue",
   "author": "alexischarlot <alexis.charlot5@etu.univ-lorraine.fr>",
@@ -10,7 +10,7 @@
       "version": "5.0.0"
     },
     "tns-android": {
-      "version": "5.0.0"
+      "version": "5.2.1"
     }
   },
   "dependencies": {

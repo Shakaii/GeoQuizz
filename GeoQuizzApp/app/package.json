@@ -3,7 +3,7 @@
     "v8Flags": "--expose_gc"
   },
   "main": "main",
-  "name": "side",
+  "name": "GeoQuizz",
   "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",

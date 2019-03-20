@@ -90,7 +90,9 @@ export default {
             this.axios.post("https://cbc0cb8c.ngrok.io/office/serie/"+response.data.id+"/photos", {
                 photos: this.images,
             });
+            //this.axios.post("https://cbc0cb8c.ngrok.io/office/file?file=");
         })
+            
         .catch(function (error) {
             console.log(error);
         });
