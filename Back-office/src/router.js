@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import AddImage from './components/AddImage.vue'
 import Series from './components/Series.vue'
 import CreateSerie from './components/CreateSerie.vue'
-import Con from './components/Con.vue'
+import Con from './components/Conn.vue'
 import Insc from './components/Insc.vue'
 
 Vue.use(Router)
