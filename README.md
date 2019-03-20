@@ -59,7 +59,7 @@ you can download a zip here (28mo) : http://debaser.fr/GeoQuizz.zip
       "x": 48.6907346,
       "y": 6.174169,
       "zoom" : 13,
-      "nb_photos" : 3,
+      "nb_photos" : 8,
       "dist" : 100
     }`
 
@@ -85,8 +85,8 @@ you can download a zip here (28mo) : http://debaser.fr/GeoQuizz.zip
         "dsc" : "Gare de Nancy"
     },
     {
-        "x": 48.66634,
-        "y": 6.16687,
+        "x": 48.6933734,
+        "y": 6.184289,
         "url": "https://i.ibb.co/q59TQ23/4.jpg",
         "dsc" : "Place Stanislas"
     },
