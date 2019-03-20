@@ -34,7 +34,7 @@ export default {
             lat: null,
             lng: null,
             latlng: null,
-            src: "https://a8b10422.ngrok.io/office/files/?name=",
+            src: "https://cbc0cb8c.ngrok.io/office/files/?name=",
         }
     },
     props: {
@@ -51,7 +51,6 @@ export default {
                 this.lat = e.latlng.lat
                 this.lng = e.latlng.lng
                 this.latlng = e.latlng
-                console.log(e)
       },
         nextImage() {
             //construction de l'element photo pour ajout dans un tableau et appel POST pour creer des photos
@@ -61,10 +60,8 @@ export default {
                 x: this.lat,
                 y: this.lng
             })
-            console.log(this.images)
             this.latlng = null
-            this.active++
-             //if (this.active++ < this.imgs.length) this.active = 0;
+             if (this.active++ > this.files.length) this.active = 0;
         }
     },
 }

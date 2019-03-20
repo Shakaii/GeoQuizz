@@ -121,6 +121,7 @@ public class SerieRepresentation {
                 }).orElseThrow ( () -> new NotFound("Serie inexistante"));
     }
 
+    @ApiOperation(value = "Permet de récupérer le fichier avec le nom passer en parametre")
     @GetMapping(value = "/files", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@RequestParam("name") String name) throws Exception {
 
@@ -136,6 +137,7 @@ public class SerieRepresentation {
                     .body(bytes);
     }
 
+    @ApiOperation(value = "Permet d'upload un fichier multipart, ici un fichier de type image)")
     @PostMapping(value = "/file")
     public String upFile(@RequestParam("file") MultipartFile file,
                          RedirectAttributes redirectAttributes) {
@@ -152,6 +154,7 @@ public class SerieRepresentation {
         return file.getOriginalFilename() +"/";
     }
 
+    @ApiOperation(value = "Permet de supprimer le fichier avec l'id passer en parametre (utiliser par filepond, plugin d'upload)")
     @DeleteMapping(value = "/file")
     public String delFile(@RequestBody String id,
                          RedirectAttributes redirectAttributes) {

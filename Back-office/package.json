@@ -11,6 +11,7 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.5",
     "filepond": "^4.2.0",
+    "filepond-plugin-image-preview": "^4.0.3",
     "leaflet": "^1.4.0",
     "vue": "^2.6.6",
     "vue-axios": "^2.1.4",

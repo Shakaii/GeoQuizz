@@ -9,9 +9,11 @@ public class Serie {
     @Id
     private String id;
     private String ville;
-    private double lat;
-    private double lng;
+    private double x;
+    private double y;
     private int dist;
+    private int nb_photos;
+    private int zoom;
 
     public Set<Photo> getPhotos() {
         return photos;
@@ -31,11 +33,13 @@ public class Serie {
 
     }
     
-    public Serie(String ville, int dist, double lat, double lng) {
+    public Serie(String ville, int dist, double x, double y, int nb_photos, int zoom) {
         this.ville = ville;
         this.dist = dist;
-        this.lat = lat;
-        this.lng = lng;
+        this.x = x;
+        this.y = y;
+        this.nb_photos = nb_photos;
+        this.zoom = zoom;
     }
 
     public Serie(String ville, int dist, String str) {
@@ -67,19 +71,43 @@ public class Serie {
         this.dist = dist;
     }
 
-    public double getLat() {
-        return lat;
+    public double getX() {
+        return x;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public double getLng() {
-        return lng;
+    public double getY() {
+        return y;
     }
 
-    public void setLng(double lng) {
-        this.lng = lng;
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public int getNb_photos() {
+        return nb_photos;
+    }
+
+    public void setNb_photos(int nb_photos) {
+        this.nb_photos = nb_photos;
+    }
+
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
+    }
+
+    public Set<Partie> getParties() {
+        return parties;
+    }
+
+    public void setParties(Set<Partie> parties) {
+        this.parties = parties;
     }
 }
