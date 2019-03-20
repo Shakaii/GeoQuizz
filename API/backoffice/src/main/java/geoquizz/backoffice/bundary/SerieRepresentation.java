@@ -35,8 +35,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.activation.FileTypeMap;
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Api( description="Gére les routes liées aux séries sur le back office.")
 @RequestMapping(value="/office", produces=MediaType.APPLICATION_JSON_VALUE)
 @ExposesResourceFor(Serie.class)
 public class SerieRepresentation {
@@ -50,7 +53,8 @@ public class SerieRepresentation {
         this.sr=sr;
         this.pr=pr;
     }
-
+   
+    @ApiOperation(value = "Récupère toutes les séries")
     @GetMapping(value = "/series")
     public ResponseEntity<?> getAllSeries(){
         Iterable<Serie> allSeries = sr.findAll();
@@ -77,6 +81,7 @@ public class SerieRepresentation {
         }
     }
 
+    @ApiOperation(value = "Récupère une série en particulier en spécifiant son id (404 si la série n'est pas trouvée)")
     @GetMapping(value = "/series/{serieId}")
     public ResponseEntity<?> getOne(@PathVariable("serieId") String id)
             throws NotFound {
@@ -93,6 +98,7 @@ public class SerieRepresentation {
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @ApiOperation(value = "Crée l série envoyée dans le body et la renvoie")
     @PostMapping(value = "/series")
     public ResponseEntity<?> postMethod(@RequestBody Serie serie) {
         serie.setId(UUID.randomUUID().toString());
@@ -102,6 +108,7 @@ public class SerieRepresentation {
         return new ResponseEntity<>(saved, responseHeaders, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Permet d'ajouter la photo (présente dans le body de la requête) à la série dont l'id est renseignée. Renvoie la photo")
     @PostMapping(value = "/series/{id}/photos")
     public ResponseEntity<?> ajoutPhotos(@PathVariable("id") String id,
                                          @RequestBody Photo photo) throws NotFound {
@@ -160,6 +167,7 @@ public class SerieRepresentation {
         return "redirect:/";
     }
 
+    @ApiOperation(value = "Modifie la distance voulue (présente dans le body) de la série dont l'id est renseignée. Renvoie la distance")
     @PutMapping(value = "/series/{id}/params")
     public ResponseEntity<?> changeParamsSerie(@PathVariable("id") String id,
                                                @RequestBody int dist) throws NotFound {

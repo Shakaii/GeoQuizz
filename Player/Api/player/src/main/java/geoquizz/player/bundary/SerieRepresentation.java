@@ -1,7 +1,7 @@
-package geoquizz.mobile.bundary;
+package geoquizz.player.bundary;
 
-import geoquizz.mobile.entity.Photo;
-import geoquizz.mobile.entity.Serie;
+import geoquizz.player.entity.Photo;
+import geoquizz.player.entity.Serie;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
-@Api( description="Gére les routes liées aux séries sur le mobile.")
+@Api( description="Gére les routes liées aux séries sur le côté player.")
 @RequestMapping(value = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SerieRepresentation {
 
@@ -31,9 +31,15 @@ public class SerieRepresentation {
     }
 
     @ApiOperation(value = "Récupère toutes les séries")
-    @GetMapping(value = "/serie")
-    public ResponseEntity<?> getTest() {
+    @GetMapping(value = "/series")
+    public ResponseEntity<?> getSeries() {
         return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Récupère une série")
+    @GetMapping(value = "/serie/{id}")
+    public ResponseEntity<?> getSerie(@PathVariable("id") String id) {
+        return new ResponseEntity<>(sr.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Crée l série envoyée dans le body et la renvoie")
@@ -46,7 +52,7 @@ public class SerieRepresentation {
         return new ResponseEntity<>(saved, rH, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Permet d'ajouter la photo (présente dans le body de la requête) à la série dont l'id est renseignée.")
+    @ApiOperation(value = "(Sert uniquement si l'autre api est éteinte) Permet d'ajouter la photo (présente dans le body de la requête) à la série dont l'id est renseignée.")
     @PostMapping(value = "/serie/{id}/photos")
     public ResponseEntity<?> postPhotos(@RequestBody Photo[] photos, @PathVariable("id") String id) {
         Serie s = sr.findById(id).get();

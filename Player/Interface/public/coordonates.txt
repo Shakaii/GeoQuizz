@@ -1,0 +1,132 @@
+﻿1
+latitude: 48.6829
+longitude: 6.16106
+
+2
+latitude: 48.68559
+longitude: 6.16104
+
+3
+latitude: 48.68891
+longitude: 6.17493
+
+4
+latitude: 48.69339
+longitude: 6.18422
+
+5
+latitude: 48.66634
+longitude: 6.16687
+
+6
+latitude: 48.6907346
+longitude: 6.174169
+
+7.
+latitude: 48.6919326
+longitude: 6.1862249
+
+8.
+latitude: 48.6802006
+longitude: 6.1692646
+
+9
+latitude: 48.6891655
+longitude: 6.1804276
+
+10
+latitude: 48.698987
+longitude: 6.1841661
+
+11
+latitude: 48.6886052
+longitude: 6.1769114
+
+12
+latitude: 48.6860938
+longitude: 6.1920457
+
+{
+    "ville" : "Nancy",
+    "x": 48.6907346,
+    "y": 6.174169,
+    "zoom" : 13,
+    "nb_photos" : 10,
+    "dist" : 100
+}
+
+[
+    {
+        "x": 48.6829,
+        "y": 6.16106,
+        "url": "https://i.ibb.co/fMZJzMr/1.jpg",
+        "dsc" : "IUT Nancy-Charlemagne"
+    },
+    {
+        "x": 48.68559,
+        "y": 6.16104,
+        "url": "https://i.ibb.co/KL91YwV/2.jpg",
+        "dsc" : "Supermarché Match Laxou"
+    },
+    {
+        "x": 48.68891,
+        "y": 6.17493,
+        "url": "https://i.ibb.co/JjpVCFZ/3.jpg",
+        "dsc" : "Gare de Nancy"
+    },
+    {
+        "x": 48.66634,
+        "y": 6.16687,
+        "url": "https://i.ibb.co/q59TQ23/4.jpg",
+        "dsc" : "Place Stanislas"
+    },
+    {
+        "x": 48.66634,
+        "y": 6.16687,
+        "url": "https://i.ibb.co/vBBwJdR/5.jpg",
+        "dsc" : "Vélodrome"
+    },
+    {
+        "x": 48.6907346,
+        "y": 6.174169,
+        "url": "https://i.ibb.co/zJKLw5Z/6.jpg",
+        "dsc" : "Tour Thiers"
+    },
+    {
+        "x": 48.6919326,
+        "y": 6.1862249,
+        "url": "https://i.ibb.co/dbtphyw/7.jpg",
+        "dsc" : "Cathédrale Notre-Dame-de-l'Annonciation de Nancy"
+    },
+    {
+        "x": 48.6802006,
+        "y": 6.1692646,
+        "url": "https://i.ibb.co/VHf1Bjr/8.jpg",
+        "dsc" : "Parc Sainte-Marie"
+    },
+    {
+        "x": 48.6891655,
+        "y": 6.1804276,
+        "url": "https://i.ibb.co/syBFRSF/9.jpg",
+        "dsc" : "Centre Commercial Saint Sébastien"
+    },
+    {
+        "x": 48.698987,
+        "y": 6.1841661,
+        "url": "https://i.ibb.co/DzGsCWM/10.jpg",
+        "dsc" : "La pépinière"
+    },
+    {
+        "x": 48.6886052,
+        "y": 6.1769114,
+        "url": "https://i.ibb.co/sFW24T1/11.jpg",
+        "dsc" : "Centre Prouvé"
+    },
+    {
+        "x": 48.6860938,
+        "y": 6.1920457,
+        "url": "https://i.ibb.co/PhHMsLB/12.jpg",
+        "dsc" : "CHRU Nancy"
+    }
+]
+

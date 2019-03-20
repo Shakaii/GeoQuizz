@@ -1,6 +1,7 @@
-# GeoQuizz
+![logo](https://cdn.discordapp.com/attachments/554606011592343582/557866827485544448/GeoQuizZLarge.png)
 
-## Maquettes
+
+## Maquettes day 1
 
 + `Homepage` <https://wireframe.cc/KIeWR5>
   
@@ -20,7 +21,19 @@
   The App that will let people take picture with geolocalization and add them to series
 
 
-
 + `Back Office` <https://wireframe.cc/K5CdrH>
   
   The Back Office will allow users to create and edit series and import photo from the app or from the computer
+  
+## Initialisation
+
+### Database (using docker)
+
+`docker run --name some-mysql -p 33066:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql:5.7`
+    
+`bash -c "clear && docker exec -it some-mysql sh"`
+    
+`mysql --password` (the password is admin)
+    
+`create database geoquizz;`
+   
