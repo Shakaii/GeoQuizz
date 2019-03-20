@@ -2,24 +2,19 @@
 <FlexboxLayout>
     <Label text="Création de série"/>
     <StackLayout v-show="active == 0" >
-            <TextView text="Nom de la série"/>
-            <!--el-input
-                placeholder="Nom/Ville de la serie"
-                v-model="name"
-                clearable>
-            </el-input>
-        <el-button :disabled='name == ""' style="margin-top: 12px;" icon="el-icon-arrow-right" @click="next">Prochaine étape</el-button-->
+        <Label text="Nom de la série"/>
+        <TextField hint="Nom de la série (ville)" autocorrect="false" v-model="name" class="input input-border"></TextField> 
+        <Button text="Prochaine étape" icon="el-icon-arrow-right" @tap="next"/>
     </StackLayout>
     <StackLayout v-show="active == 1">
-        <TextView text="Géolocalisation de la série"/>
-        <!--el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
-        <el-button :disabled="lat == null"  style="margin-top: 12px;" icon="el-icon-arrow-right" @click="next">Prochaine étape</el-button-->
+        <Label text="Géolocalisation de la série"/>
+        <Button text="Prochaine étape" icon="el-icon-arrow-right" @tap="next"/>
+        <Button text="Etape précédente" icon="el-icon-arrow-left" @tap="back"/>
     </StackLayout>
     <StackLayout v-show="active == 2">
-        <TextView text="Ajout des photos"/>
-        <!--el-button  style="margin-top: 12px;" @click="back">Étape précédente</el-button>
-        <el-button  style="margin-top: 12px;" @click="createSerie">Ajouter des photos</el-button>
-        <router-link to="/"><el-button  style="margin-top: 12px;" @click="createSerie">Terminer</el-button></router-link-->
+        <Label text="Ajout des photos"/>
+        <Button text="Terminer" @tap="createSerie"/>
+        <Button text="Etape précédente" icon="el-icon-arrow-left" @tap="back"/>
     </StackLayout>
 </FlexboxLayout>
 </template>
@@ -31,7 +26,7 @@
 export default {
     name: 'createserie',
     data() {
-        return {
+        return {    
             active: 0,
             name: "",
             tileProvider:{
