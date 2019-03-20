@@ -50,7 +50,13 @@
     },
     methods: {
       retrieveSeries() {
-        this.axios.get('http://localhost:8081/office/series')
+        let token = this.getCookie("token")
+        this.axios.get('http://localhost:8081/office/series', {
+            headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            }
+          })
           .then((response) => {
             this.series = response.data._embedded.series
           })
@@ -71,8 +77,20 @@
           })
           .catch(_ => {});
       },
-      del() {
-
+      getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
       }
     },
     created() {

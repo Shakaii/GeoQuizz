@@ -33,7 +33,19 @@
         },
         methods: {
             createAccount() {
-                this.pass === this.passCheck ? console.log("yes") : console.log("no")
+                this.pass === this.passCheck ? this.insc() : console.log("no")
+            },
+            insc() {
+                this.axios.post("http://localhost:8081/registration", {
+                    username: this.username,
+                    password: this.pass
+                })
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
             }
         },
     }
