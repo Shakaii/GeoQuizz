@@ -2,7 +2,7 @@
     <Page>
         <ActionBar>
             <GridLayout width="100%" columns="auto, *">
-                <Label text="MENU" @tap="$refs.drawer.nativeView.showDrawer()" col="0" />
+                <Label v-show="current != 0" text="MENU" @tap="$refs.drawer.nativeView.showDrawer()" col="0" />
                 <Label class="title" text="GeoQuizz Mobile" col="1" />
             </GridLayout>
         </ActionBar>
@@ -10,10 +10,10 @@
         <RadSideDrawer ref="drawer">
 
 
-            <StackLayout ~drawerContent backgroundColor="#ffffff">
+            <StackLayout v-show="current != 0" ~drawerContent backgroundColor="#ffffff">
                 <ScrollView>
                     <StackLayout>
-                        <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Series" />
+                        <Label class="drawer-header" @tap="current = 2; $refs.drawer.nativeView.closeDrawer()" text="Series" />
 
                         <Label v-for='serie in seriesInfo' class="drawer-item" @tap="current = 1;images=[];setSerie(serie.id);searchSerie(serie._links.self.href);$refs.drawer.nativeView.closeDrawer()"
                             :text='serie.ville' />
@@ -22,8 +22,12 @@
 
             </StackLayout>
             <GridLayout ~mainContent columns="*" rows="*">
-               
-                <Label v-show="current == 0" class="message" :text="msg" col="0" row="0" />
+                <StackLayout v-show="current == 0">
+                    <TextField hint="Utilisateur" autocorrect="false" v-model="username"></TextField>
+                    <TextField secure="true" hint="Mot de passe" autocorrect="false" v-model="pass"></TextField>
+                    <Button @tap="auth" text="authentification" />
+                </StackLayout>
+                <Label v-show="current == 2" class="message" :text="msg" col="0" row="0" />
                 <StackLayout v-show="current == 1">
                     <label class="message" :text="serieInfo" col="0" row="0" />
 
@@ -34,9 +38,9 @@
                         <WrapLayout>
                             <Image v-for="img in images" :src="img.src" width="150" height="150" />
                         </WrapLayout>
-                     
+
                     </ScrollView>
-                    <Button v-show="images.length >=1" @tap="upPhoto" text="Envoyer les photos prises"  />
+                    <Button v-show="images.length >=1" @tap="upPhoto" text="Envoyer les photos prises" />
                     <ScrollView orientation="horizontal">
                         <WrapLayout>
                             <Image v-for="ima in seriePhoto" :src="ima.url" width="150" height="150" />
@@ -55,13 +59,15 @@
 
 <script>
     import * as camera from "nativescript-camera";
-const geolocation = require("nativescript-geolocation");
-const imageSourceModule = require("tns-core-modules/image-source");
+    const geolocation = require("nativescript-geolocation");
+    const imageSourceModule = require("tns-core-modules/image-source");
     import {
         Image
     } from "tns-core-modules/ui/image";
-import { error } from 'tns-core-modules/trace/trace';
-    
+    import {
+        error
+    } from 'tns-core-modules/trace/trace';
+
     export default {
         name: 'App',
         components: {
@@ -77,15 +83,27 @@ import { error } from 'tns-core-modules/trace/trace';
                 serieInfo: "",
                 seriePhoto: "",
                 images: [],
-                geocal:0,
-                serieId:"",
-                photoName:"",
+                geocal: 0,
+                serieId: "",
+                photoName: "",
+                locations: [],
+                username: "",
+                pass: "",
+                token:"",
             }
         },
         methods: {
             searchSeries() {
+
+                this.token = this.getToken();
+                this.token = this.token.replace('token=', '')
+      
                 this.axios
-                    .get("https://a8b10422.ngrok.io/office/series")
+                    .get("https://cbc0cb8c.ngrok.io/office/series", {
+                        headers: {
+                            'Authorization': this.token
+                        }
+                    })
                     .then(response => (this.seriesInfo = response.data._embedded.series))
                     .catch(error => {
                         console.log(error);
@@ -94,7 +112,11 @@ import { error } from 'tns-core-modules/trace/trace';
             },
             searchSerie(link) {
                 this.axios
-                    .get(link)
+                    .get(link, {
+                        headers: {
+                            'Authorization': this.token
+                        }
+                    })
                     .then(response => (this.serieInfo = response.data.ville, this.seriePhoto = response.data.photos))
                     .catch(error => {
                         console.log(error);
@@ -116,6 +138,22 @@ import { error } from 'tns-core-modules/trace/trace';
                                 let img = new Image();
                                 img.src = imageAsset;
                                 this.images.push(img);
+
+
+
+                                /*let watchId = geolocation.watchLocation(
+                                     function(loc){
+                                          if (loc) {
+                                              console.log("Received location: " + loc);
+                                          }
+                                     }, function(e){
+                                              console.log("Error: " + e.message);
+                                          },{desiredAccuracy: 3, updateDistance: 10, minimumUpdateTime : 1000 * 20}
+                                    )
+                                    if (watchId) {
+                                          geolocation.clearWatch(watchId);
+                                      }*/
+                                this.setGeolocation();
                                 console.log(
                                     "ive got " + this.images.length +
                                     " images now."
@@ -125,14 +163,81 @@ import { error } from 'tns-core-modules/trace/trace';
                                 console.log("error:", e);
                             });
                     })
+                    .then(() => {
+
+                    })
                     .catch(e => {
                         console.log("Error requesting permission");
                     });
             },
-            enableLocationTap(args) {
+
+            upPhoto() {
+
+                this.images.forEach(image => {
+
+
+                    this.axios
+                        .post("https://cbc0cb8c.ngrok.io/office/series/" + this.serieId + "/photos", image, {
+                            headers: {
+                                'Content-type': 'multipart/form-data',
+                                 'Authorization': this.token
+                            }
+                        })
+                        .then(response => (this.photoName = response.data.name, console.log(response)).catch(
+                            err => console.log(error)));
+
+                });
+            },
+            setSerie(serie) {
+                this.serieId = serie;
+            },
+            setGeolocation() {
+                let loca = geolocation.getCurrentLocation({
+                    desiredAccuracy: Accuracy.high,
+                    maximumAge: 5000,
+                    timeout: 20000
+                })
+                console.log(loca.longitude + " / " + loca.latitude);
+            },
+            auth() {
+                this.axios.post("https://cbc0cb8c.ngrok.io/login", JSON.stringify({
+                        username: this.username,
+                        password: this.pass
+                    }), {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((res) => {
+                        //$cookie.set('token', res.headers)
+                        let d = new Date();
+                        d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
+                        let expires = "expires=" + d.toUTCString();
+                        var cookieString = "token" + "=" + res.headers.authorization + ";" + expires;
+                      
+                        var cookieManager = android.webkit.CookieManager.getInstance();
+                        cookieManager.setAcceptCookie(true);
+                        cookieManager.removeSessionCookie();
+                        cookieManager.setCookie("/token", cookieString);
+
+                   
+
+
+
+                        this.getAllSeries();
+                        this.current = 2;
+                    })
+                    .catch((e) => {
+                        this.error = true
+                        console.log(e)
+                    })
+
+            },
+            getAllSeries() {
+                this.searchSeries();
                 geolocation.isEnabled().then(function (isEnabled) {
                     if (!isEnabled) {
-                        this.geocal=1;
+                        this.geocal = 1;
                         geolocation.enableLocationRequest().then(function () {}, function (e) {
                             console.log("Error: " + (e.message || e));
                         });
@@ -141,39 +246,17 @@ import { error } from 'tns-core-modules/trace/trace';
                     console.log("Error: " + (e.message || e));
                 });
             },
-            upPhoto(){
-                
-                this.images.forEach(image => {
+            getToken() {
+                var cookieManager = android.webkit.CookieManager.getInstance();
+             
+                return cookieManager.getCookie("/token");
+            }
 
-                    const source = new imageSourceModule.ImageSource();
-                            source.fromAsset(image)
-                            .then((imageSource) => {
-                                imageSource.toBase64String("png");
-                            }).catch((err) => {
-                                    console.log("Error -> " + err.message);
-                        });
-
-                     this.axios
-                    .post("https://a8b10422.ngrok.io/office/series/"+this.serieId+"/photos",image ,{ headers: {
-                        'Content-type': 'multipart/form-data', }
-                    }) 
-                    .then(response => (this.photoName = response.data.name,console.log(response)).
-                    catch(err => console.log(error)))
-                    ;
-                    
-                });
-            },
-            setSerie(serie){
-                this.serieId=serie;
-            },
-            
         },
         mounted() {
-         geolocation.enableLocationRequest();
+            geolocation.enableLocationRequest();
         },
-        created: function () {
-            this.searchSeries();
-        }
+
     }
 
 </script>
@@ -199,7 +282,7 @@ import { error } from 'tns-core-modules/trace/trace';
 
     .drawer-header {
         padding: 50 16 16 16;
-        margin-bottom: 16;  
+        margin-bottom: 16;
         background-color: teal;
         color: #ffffff;
         font-size: 24;
