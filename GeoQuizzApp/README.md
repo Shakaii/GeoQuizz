@@ -1,12 +1,10 @@
 ![logo](https://cdn.discordapp.com/attachments/554606011592343582/557866827485544448/GeoQuizZLarge.png)
 
-![logo](https://cdn.discordapp.com/attachments/554606011592343582/557866827485544448/GeoQuizZLarge.png)
-
 # GeoQuizz
 
 > L'application mobile GeoQuizz 
 
-## Télécharger l'apk
+## TÃ©lÃ©charger l'apk
 
 http://debaser.fr/GeoQuizZ/GeoQuizZ.apk
 
