@@ -1,4 +1,5 @@
-# side
+
+# GeoQuizz
 
 > A native application built with NativeScript-Vue
 
