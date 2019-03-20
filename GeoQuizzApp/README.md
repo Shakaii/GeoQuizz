@@ -6,6 +6,10 @@
 
 > L'application mobile GeoQuizz 
 
+## Télécharger l'apk
+
+http://debaser.fr/GeoQuizZ/GeoQuizZ.apk
+
 ## Usage
 
 ``` bash
