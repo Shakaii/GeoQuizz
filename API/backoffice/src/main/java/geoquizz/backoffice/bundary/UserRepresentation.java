@@ -1,6 +1,7 @@
 package geoquizz.backoffice.bundary;
 
 import geoquizz.backoffice.entity.User;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class UserRepresentation {
     UserResource ur;
     BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
 
+    @ApiOperation(value = "Route d'inscription pour les utilisateur")
     @PostMapping("/registration")
     public ResponseEntity registration(@RequestBody() User u) {
         if (ur.existsByUsername(u.getUsername())) {

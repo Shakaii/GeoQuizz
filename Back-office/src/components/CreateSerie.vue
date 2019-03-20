@@ -25,9 +25,6 @@
         <div v-show="active == 2">
             <el-button style="margin-top: 12px;" @click="back">Étape précédente</el-button>
             <el-button style="margin-top: 12px;" @click="createSerie">Ajouter des photos</el-button>
-            <router-link to="/">
-                <el-button style="margin-top: 12px;" @click="createSerie">Terminer</el-button>
-            </router-link>
         </div>
     </div>
 </template>
@@ -56,7 +53,8 @@
                 center: L.latLng(48.69333, 6.18324),
                 lat: null,
                 lng: null,
-                imgUrl: ""
+                imgUrl: "",
+                lastId: null
             }
         },
         components: {
