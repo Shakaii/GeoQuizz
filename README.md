@@ -6,13 +6,40 @@
 
 you can download a zip here (28mo) : http://debaser.fr/GeoQuizz.zip 
 
-## Developpement's demos
+## Game rules
 
-+ `démo jouable en pur javascript` <http://debaser.fr/geoquiz/1>
-+ `jeu jouable en full vueJs` <http://debaser.fr/geoquiz/2>
-+ `nouvelles features (difficultée, sauvegarde, etc...)` <http://debaser.fr/geoquiz/3>
-+ `améliorations css` <http://debaser.fr/geoquiz/4>
-+ `pré implémentation de l'api` <http://debaser.fr/geoquiz/5>
+From the home screen you can play a small demo of the game where the goal is to find the IUT Charlemagne of Nancy.
+You can also start a game, display scores for all the levels or get back to the saved game if there's one.
+Starting a game will lead you to the level selection screen where you can chose a level (a series of photos from the same location or theme, by example a city).
+
+From this screen you will also be able to choose a difficulty. With the easiest difficulty you'll have more time to find where the picture has been taken, the radius that will give you points will also be a bit bigger but you'll earn less points. With the 2 others difficulties you'll have less time, the radius that grant points will decrease in size but you'll get a lot more points.
+
+During the game you'll have to click the correct location like on the demo, but you only have one try and you'll have a timer. Also the faster and the more accurate you are the more points you'll get.
+
+You can either quit or save mid game. You'll be able to continue your game from the home screen if you come back later
+
+  ### Scoring
+At the end of the game you'll be able to save your score or not, if you do so it'll be forever displayed in the score screen.
+
+The score is calculated this way : Each levels has a different radius that will grant points. By example if the level radius is 100 meters, clicking 100 meters around the correct location will grant you 5 points, around 200 meters will grant you 3 points and around 300 meters will grant you 1 point. 
+
+Time remaining is also a factor if you still have more than 2/3 of the time remaining your score will have a multiplier of 4, more  than1/3 remaining will grant you a multiplier of 2, less but more than 0/3 will grant you no multiplier. If you go under the given timer, you'll gain no points.
+
+Playing on the medium difficulty will double your score, and playing on the hardest difficulty will triple the score.
+
+For a level with 10 pictures the maximum score will be 600 in the hardest difficulty.
+
+L'on peut également commencer une partie, regarder les scores ou encore récupérer la partie sauvegardée s'il y en a une.
+
+Commencer une partie permet à l'utilisateur de choisir un niveau (une série de photo d'un lieu. Par exemple Nancy)
+
+## First Developpement's week demos
+
++ `javascript's playable demo` <http://debaser.fr/geoquiz/1>
++ `vueJs's playable game` <http://debaser.fr/geoquiz/2>
++ `new features (difficulty, saves, etc...)` <http://debaser.fr/geoquiz/3>
++ `css upgrade` <http://debaser.fr/geoquiz/4>
++ `more upgrades` <http://debaser.fr/geoquiz/5>
 
 ## Maquettes day 1
 
