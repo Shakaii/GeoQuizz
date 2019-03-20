@@ -81,7 +81,7 @@ import CreateSerie from './CreateSerie.vue'
       },
 
 
-        },
+        
 
         data() {
             return {
