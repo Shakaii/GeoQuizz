@@ -30,15 +30,7 @@ https://trello.com/b/kw2pvLTp/geoquizz
   
 ## Initialisation
 
-### Database (using docker)
-
-`docker run --name some-mysql -p 33066:3306 -e MYSQL_ROOT_PASSWORD=admin -d mysql:5.7`
-    
-`bash -c "clear && docker exec -it some-mysql sh"`
-    
-`mysql --password` (the password is admin)
-    
-`create database geoquizz;`
+Éxecuter docker-compose up -d dans le dossier API
 
 ### Player
 
