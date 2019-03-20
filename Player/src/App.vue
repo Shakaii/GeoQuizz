@@ -743,6 +743,14 @@
 
     @media screen and (max-width: 1000px) {
 
+       #texte{
+         font-size: 0.8em;
+       }
+
+       .timerAndText{
+            font-size: 0.8em;
+        }
+
         .icon{
           height:30px;
         }
