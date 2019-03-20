@@ -1,15 +1,18 @@
 <template>
     <el-row>
         <serie v-on:serieId="selectSerieId" v-on:selectSerie="selectSerie" v-for="serie in series" v-bind:name="serie.ville" v-bind:id="serie.id" v-bind:selected="serie.ville == selectedSerie"></serie>
+        <div class="spinnerContainer"><Spinner v-if="series.length == 0"></Spinner></div>
     </el-row>
 </template>
 
 <script>
     import Serie from './Serie.vue'
+    import Spinner from './Spinner.vue'
     export default {
         name: 'series',
         components: {
             Serie,
+            Spinner
         },
 
         data() {
@@ -67,5 +70,11 @@
 
     a {
         color: #42b983;
+    }
+
+    .spinnerContainer{
+        display:flex;
+        align-items: center;
+        justify-content:center;
     }
 </style>

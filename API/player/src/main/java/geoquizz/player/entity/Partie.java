@@ -13,13 +13,13 @@ public class Partie {
     @Id
     private String id;
     private String token;
-    private int nb_photos;
     private int status; //0 : creer, 1: en cours, 2: fini
     private int score;
     private int difficulty; // 0 1 2
     private String joueur;
     private boolean saveScore; //true false
     private String ville;
+    private int nb_photos; //rm this later
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "serie_id", nullable = false)
@@ -39,6 +39,10 @@ public class Partie {
         this.status = 0;
     }
 
+    public int getNb_photos(){ return nb_photos;}
+
+    public void setNb_photos(int nb_photos){ this.nb_photos = nb_photos;}
+
     public String getId() {
         return id;
     }
@@ -53,14 +57,6 @@ public class Partie {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public int getNb_photos() {
-        return nb_photos;
-    }
-
-    public void setNb_photos(int nb_photos) {
-        this.nb_photos = nb_photos;
     }
 
     public int getStatus() {

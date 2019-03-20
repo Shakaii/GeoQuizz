@@ -44,7 +44,7 @@ public class PlayerApplicationTests {
 		pr.deleteAll();
 	}
 
-	@Test
+	/*@Test
 	public void getOneGame() {
 		Serie s1 = new Serie("Nancy",3,"");
 		s1.setId(UUID.randomUUID().toString());
@@ -58,9 +58,9 @@ public class PlayerApplicationTests {
 		ResponseEntity<String> response = restTemplate.getForEntity("/game/"+p1.getId(), String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);	
 		assertThat(response.getBody()).contains("Joueur");
-	}
+	}*/
 
-	@Test
+	/*@Test
 	public void postNewGame() throws Exception {
 		Serie s1 = new Serie("Nancy",3,"");
 		s1.setId(UUID.randomUUID().toString());
@@ -78,11 +78,11 @@ public class PlayerApplicationTests {
 		response = restTemplate.getForEntity(location, Partie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		*/
-	}
+	/*}
 
 	private String toJsonString(Object o) throws Exception {
 		ObjectMapper map = new ObjectMapper();
 		return map.writeValueAsString(o);
 	}
-
+*/
 }

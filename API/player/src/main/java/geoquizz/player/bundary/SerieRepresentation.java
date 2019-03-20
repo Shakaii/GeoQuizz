@@ -36,6 +36,12 @@ public class SerieRepresentation {
         return new ResponseEntity<>(sr.findAll(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Récupère une série")
+    @GetMapping(value = "/serie/{id}")
+    public ResponseEntity<?> getSerie(@PathVariable("id") String id) {
+        return new ResponseEntity<>(sr.findById(id), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Crée l série envoyée dans le body et la renvoie")
     @PostMapping(value = "/serie")
     public ResponseEntity<?> postSerie(@RequestBody Serie s) {

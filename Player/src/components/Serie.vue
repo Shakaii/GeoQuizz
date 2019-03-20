@@ -1,7 +1,7 @@
 <template>
     <el-button @click="selectSerie(name, id)" v-bind:class="{isSelected: selected}">
         <h1>{{name}}</h1>
-        <img src="../assets/logo.png">
+        <img src="../assets/town.png">
     </el-button>
 </template>
 
@@ -28,5 +28,9 @@
 <style scoped>
     .isSelected{
         background-color: #e6f2f2;
+    }
+
+    img{
+        width:170px;
     }
 </style>

@@ -7,7 +7,7 @@
             </el-table-column>
             <el-table-column prop="difficulty" label="Difficulté" sortable >
             </el-table-column>
-            <el-table-column prop="nb_photos" label="Longueur de la série" sortable >
+            <el-table-column prop="photos.length" label="Nombre de photos du niveau" sortable >
             </el-table-column>
             <el-table-column prop="score" label="Score" sortable>
             </el-table-column>
