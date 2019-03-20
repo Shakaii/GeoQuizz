@@ -1,6 +1,12 @@
 ![logo](https://cdn.discordapp.com/attachments/554606011592343582/557866827485544448/GeoQuizZLarge.png)
 
-## Démos du jeu pendant le développement
+## player interface screenshots
+
+![screenshots](https://cdn.discordapp.com/attachments/369845824659914752/557905836270419969/unknown.png)
+
+you can download a zip here (28mo) : http://debaser.fr/GeoQuizz.zip 
+
+## Developpement's demos
 
 + `démo jouable en pur javascript` <http://debaser.fr/geoquiz/1>
 + `jeu jouable en full vueJs` <http://debaser.fr/geoquiz/2>
