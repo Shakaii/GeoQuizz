@@ -13,10 +13,12 @@
             <StackLayout v-show="current != 0" ~drawerContent backgroundColor="#ffffff">
                 <ScrollView>
                     <StackLayout>
-                        <Label class="drawer-header" @tap="current = 2; $refs.drawer.nativeView.closeDrawer()" text="Series" />
+                    <Label class="drawer-header" @tap="current = 0; $refs.drawer.nativeView.closeDrawer()" text="Séries"/>
+                 
+                    <Label class="drawer-item" @tap="current = 2;$refs.drawer.nativeView.closeDrawer()" text='Créer une nouvelle série'/>
 
-                        <Label v-for='serie in seriesInfo' class="drawer-item" @tap="current = 1;images=[];setSerie(serie.id);searchSerie(serie._links.self.href);$refs.drawer.nativeView.closeDrawer()"
-                            :text='serie.ville' />
+                    <Label v-for='serie in seriesInfo' class="drawer-item" @tap="current = 1;searchSerie(serie._links.self.href);$refs.drawer.nativeView.closeDrawer()" :text='serie.ville'/>
+                    
                     </StackLayout>
                 </ScrollView>
 
@@ -34,6 +36,7 @@
 
 
                     <Button text="Prendre une photo" @tap="takePicture" />
+                    <Button text="Importer une photo" @tap="selectPicture" />
                     <ScrollView orientation="horizontal">
                         <WrapLayout>
                             <Image v-for="img in images" :src="img.src" width="150" height="150" />
@@ -47,17 +50,19 @@
                         </WrapLayout>
                     </ScrollView>
                 </StackLayout>
-
-
+            
+                <create-serie v-show="current == 2"/>
+          
             </GridLayout>
 
         </RadSideDrawer>
 
-
+        
     </Page>
 </template>
 
 <script>
+import CreateSerie from './CreateSerie.vue'
     import * as camera from "nativescript-camera";
     const geolocation = require("nativescript-geolocation");
     const imageSourceModule = require("tns-core-modules/image-source");
@@ -68,9 +73,12 @@
         error
     } from 'tns-core-modules/trace/trace';
 
-    export default {
-        name: 'App',
-        components: {
+  export default {
+      name: 'App',
+      components: {
+          CreateSerie,
+         
+      },
 
 
         },

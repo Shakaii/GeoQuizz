@@ -9,6 +9,9 @@ Vue.use(VueAxios, axios)
 
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 
+//pour mapbox
+Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
+
 new Vue({
   render: h => h('frame', [h(App)])
 }).$start()

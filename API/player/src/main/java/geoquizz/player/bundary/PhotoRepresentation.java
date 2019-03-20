@@ -1,17 +1,12 @@
 package geoquizz.player.bundary;
 
-import geoquizz.player.entity.Serie;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import io.swagger.annotations.Api;
 
 @RestController
+@Api( description="Gére les routes liées aux photos sur le côté player.")
 @RequestMapping(value = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PhotoRepresentation {
 
