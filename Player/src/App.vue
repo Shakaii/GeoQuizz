@@ -7,8 +7,7 @@
         </head>
         <el-header>
             <div class="header-left title" v-if="state != 'inGame'">
-                <img class="icon" src="favicon.png">
-                GeoQuizz
+                <img class="icon" src="GeoQuizZWhite.png">
             </div>
             <div class="header-left" v-if="state=='inGame'">
                 <b>{{serieName}}</b> : {{currentPictureIndex}} / {{photos.length}}<br>
@@ -55,11 +54,11 @@
 
             <div class="center" v-if="state == 'chosingSerie'">
               <el-input class="nameInput" v-on:keyup.enter="startGame"  placeholder="Entrez votre pseudo" prefix-icon="el-icon-edit" v-model="username"></el-input>
-              <el-button type="primary" plain @click="startGame" :disabled="!username || !selectedSerie" >Commencer la série</el-button> 
+              <el-button type="primary" plain @click="startGame" :disabled="!username || !selectedSerie" >Commencer la partie</el-button> 
             </div>
 
             <div class="center" v-if="state == 'demo'">
-                <el-button type="primary" plain  @click="showSeries" >Choisir une série</el-button> 
+                <el-button type="primary" plain  @click="showSeries" >Choisir un niveau</el-button> 
                 <el-button type="primary" v-if="gameSaved" plain  @click="getSave" >Reprendre la partie sauvegardée</el-button>
                 <el-button type="primary" plain  @click="showScore" >Voir les scores</el-button>  
             </div>
@@ -72,7 +71,7 @@
                 <div class="timerAndText">
                     <el-progress v-if="!resultTexte" class="progressCircle" type="circle" :percentage="(time * 100) / maxTime" :color="color" status="text">{{time}}<br>secondes<br>restantes</el-progress>
                     <el-progress v-if="!resultTexte" class="progressBar" :percentage="(time * 100) / maxTime" :color="color" status="text" >{{time}} secondes restantes</el-progress>
-                    {{resultTexte}}
+                    {{resultTexte}} <br> {{zoneName}}
                 </div>
                 <div class="actionButton">
                     <el-button type="primary" v-if="currentPictureIndex == photos.length"  :disabled="!resultTexte" plain @click="nextPicture">Fin</el-button>
@@ -91,6 +90,7 @@
     import { LMap, LTileLayer, LMarker, LCircle} from 'vue2-leaflet';
     import Series from './components/Series.vue';
     import Scores from './components/Scores.vue';
+    import Spinner from './components/Spinner.vue';
     
     export default {
         name:"Geoquizz",
@@ -100,7 +100,8 @@
             LMarker,
             LCircle,
             Series,
-            Scores
+            Scores,
+            Spinner
         },
 
     data(){
@@ -109,7 +110,7 @@
             tileProvider:{
                 name: 'OpenStreetMap',
                 visible: true,
-                attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a>',
                 url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             },
             found : false,
@@ -142,7 +143,8 @@
             color: "#67C23A",
             gameSaved: false,
             bestScore: 0,
-            gameId: 0
+            gameId: 0,
+            zoneName: ""
         }
     },
     mounted(){
@@ -238,14 +240,16 @@
                 else if (distance < (this.distanceD * 2)) scoreGain = 3 * this.multiplier;
                 else if (distance < (this.distanceD * 3)) scoreGain = 1 * this.multiplier;
 
-                this.score += scoreGain;
+                
 
                 if (this.difficulty == 1){
                   scoreGain = scoreGain * 2;
                 }
                 else if (this.difficulty == 2){
-                  scoreGain = scoregain * 3
+                  scoreGain = scoreGain * 3;
                 }
+
+                this.score += scoreGain;
 
                 this.resultTexte = "Bien joué ! Vous avez cliqué à " + Math.round(distance) + " mètres de l'endroit où la photo a été prise. Vous gagnez " + scoreGain + ' points.'
             }
@@ -282,6 +286,7 @@
 
                 this.resultTexte = "Pas de chance ! Vous avez cliqué à " + Math.round(distance - 300) + " mètres de la zone où la photo a été prise."
             }
+              this.zoneName = "La photo a été prise à " + this.photos[this.currentPictureIndex - 1].dsc
               clearInterval(this.interval);
         },
 
@@ -289,7 +294,7 @@
         showSeries: function(){
 
             this.state = "chosingSerie";
-            this.texte = "Choisissez une série et une difficultée pour commencer!";;
+            this.texte = "Choisissez un niveau et une difficultée pour commencer!";;
             this.texte2 = ""   
         },
 
@@ -345,7 +350,7 @@
                         if ($this.difficulty == 1){
                             $this.maxScore = $this.maxScore * 2;
                         }
-                        else if ($this.difficulty == 1){
+                        else if ($this.difficulty == 2){
                             $this.maxScore = $this.maxScore * 3
                         }
 
@@ -382,7 +387,14 @@
                 this.currentPicture = this.photos[this.currentPictureIndex].url;
                 this.pictureCoordonates = [this.photos[this.currentPictureIndex].x,this.photos[this.currentPictureIndex].y];
                 this.maxCurrentScore = (this.currentPictureIndex + 1) * 20;
+                if (this.difficulty == 1){
+                    this.maxCurrentScore = this.maxCurrentScore * 2
+                }
+                else if (this.difficulty == 2){
+                    this.maxCurrentScore = this.maxCurrentScore * 3
+                }
                 this.currentPictureIndex ++;
+                this.zoneName = "";
                 
                 this.multiplier = 4;
                 this.resultTexte = "";
@@ -615,7 +627,8 @@
     }
 
     .icon{
-        width: 20px;
+        height:2.70em;
+        
     }
 
     .nameInput{
@@ -688,7 +701,7 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        background-color: #409EFF;
+        background-color: rgb(0,140,140);
     }
 
     .header-left{
@@ -730,6 +743,10 @@
 
     @media screen and (max-width: 1000px) {
 
+        .icon{
+          height:30px;
+        }
+
         .difficultyContainer{
             flex-direction: column;
         }
@@ -764,7 +781,8 @@
         }
     
         .el-header{
-            flex-direction:column-reverse;
+            flex-direction:row;
+            justify-content: space-between;
             height: 100px!important;
         }
 
