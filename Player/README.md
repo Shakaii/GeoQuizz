@@ -9,30 +9,26 @@ you can download a zip here with screenshots for all functionnalities (28mo) : h
 
 ## Game rules
 
-From the home screen you can play a small demo of the game where the goal is to find the IUT Charlemagne of Nancy.
-You can also start a game, display scores for all the levels or get back to the saved game if there's one.
-Starting a game will lead you to the level selection screen where you can chose a level (a series of photos from the same location or theme, by example a city).
+   From the home screen you can play a small demo of the game where the goal is to find the IUT Charlemagne of Nancy.
+   You can also start a game, display scores for all the levels or get back to the saved game if there's one.
+   Starting a game will lead you to the level selection screen where you can chose a level (a series of photos from the same location or theme, by example a city).
 
-From this screen you will also be able to choose a difficulty. With the easiest difficulty you'll have more time to find where the picture has been taken, the radius that will give you points will also be a bit bigger but you'll earn less points. With the 2 others difficulties you'll have less time, the radius that grant points will decrease in size but you'll get a lot more points.
+   From this screen you will also be able to choose a difficulty. With the easiest difficulty you'll have more time to find where the picture has been taken, the radius that will give you points will also be a bit bigger but you'll earn less points. With the 2 others difficulties you'll have less time, the radius that grant points will decrease in size but you'll get a lot more points.
 
-During the game you'll have to click the correct location like on the demo, but you only have one try and you'll have a timer. Also the faster and the more accurate you are the more points you'll get.
+   During the game you'll have to click the correct location like on the demo, but you only have one try and you'll have a timer. Also the faster and the more accurate you are the more points you'll get.
 
-You can either quit or save mid game. You'll be able to continue your game from the home screen if you come back later
+   You can either quit or save mid game. You'll be able to continue your game from the home screen if you come back later
 
    ### Scoring
-At the end of the game you'll be able to save your score or not, if you do so it'll be forever displayed in the score screen.
+   At the end of the game you'll be able to save your score or not, if you do so it'll be forever displayed in the score screen.
 
-The score is calculated this way : Each levels has a different radius that will grant points. By example if the level radius is 100 meters, clicking 100 meters around the correct location will grant you 5 points, around 200 meters will grant you 3 points and around 300 meters will grant you 1 point. 
+   The score is calculated this way : Each levels has a different radius that will grant points. By example if the level radius is 100 meters, clicking 100 meters around the correct location will grant you 5 points, around 200 meters will grant you 3 points and around 300 meters will grant you 1 point. 
 
-Time remaining is also a factor if you still have more than 2/3 of the time remaining your score will have a multiplier of 4, more  than1/3 remaining will grant you a multiplier of 2, less but more than 0/3 will grant you no multiplier. If you go under the given timer, you'll gain no points.
+   Time remaining is also a factor if you still have more than 2/3 of the time remaining your score will have a multiplier of 4, more  than1/3 remaining will grant you a multiplier of 2, less but more than 0/3 will grant you no multiplier. If you go under the given timer, you'll gain no points.
 
-Playing on the medium difficulty will double your score, and playing on the hardest difficulty will triple the score.
+   Playing on the medium difficulty will double your score, and playing on the hardest difficulty will triple the score.
 
-For a level with 10 pictures the maximum score will be 600 in the hardest difficulty.
-
-L'on peut également commencer une partie, regarder les scores ou encore récupérer la partie sauvegardée s'il y en a une.
-
-Commencer une partie permet à l'utilisateur de choisir un niveau (une série de photo d'un lieu. Par exemple Nancy)
+   For a level with 10 pictures the maximum score will be 600 in the hardest difficulty.
 
 ## First Developpement's week demos
 
@@ -97,80 +93,80 @@ If the database is already filled, you won't need to do this
 
 `POST` to `http://localhost:8083/player/serie/{id}/photos`
 
-  `[
-    {
-        "x": 48.6829,
-        "y": 6.16106,
-        "url": "https://i.ibb.co/fMZJzMr/1.jpg",
-        "dsc" : "IUT Nancy-Charlemagne"
-    },
-    {
-        "x": 48.68559,
-        "y": 6.16104,
-        "url": "https://i.ibb.co/KL91YwV/2.jpg",
-        "dsc" : "Supermarché Match Laxou"
-    },
-    {
-        "x": 48.68891,
-        "y": 6.17493,
-        "url": "https://i.ibb.co/JjpVCFZ/3.jpg",
-        "dsc" : "Gare de Nancy"
-    },
-    {
-        "x": 48.6933734,
-        "y": 6.184289,
-        "url": "https://i.ibb.co/q59TQ23/4.jpg",
-        "dsc" : "Place Stanislas"
-    },
-    {
-        "x": 48.66634,
-        "y": 6.16687,
-        "url": "https://i.ibb.co/vBBwJdR/5.jpg",
-        "dsc" : "Vélodrome"
-    },
-    {
-        "x": 48.6907346,
-        "y": 6.174169,
-        "url": "https://i.ibb.co/zJKLw5Z/6.jpg",
-        "dsc" : "Tour Thiers"
-    },
-    {
-        "x": 48.6919326,
-        "y": 6.1862249,
-        "url": "https://i.ibb.co/dbtphyw/7.jpg",
-        "dsc" : "Cathédrale Notre-Dame-de-l'Annonciation de Nancy"
-    },
-    {
-        "x": 48.6802006,
-        "y": 6.1692646,
-        "url": "https://i.ibb.co/VHf1Bjr/8.jpg",
-        "dsc" : "Parc Sainte-Marie"
-    },
-    {
-        "x": 48.6891655,
-        "y": 6.1804276,
-        "url": "https://i.ibb.co/syBFRSF/9.jpg",
-        "dsc" : "Centre Commercial Saint Sébastien"
-    },
-    {
-        "x": 48.698987,
-        "y": 6.1841661,
-        "url": "https://i.ibb.co/DzGsCWM/10.jpg",
-        "dsc" : "La pépinière"
-    },
-    {
-        "x": 48.6886052,
-        "y": 6.1769114,
-        "url": "https://i.ibb.co/sFW24T1/11.jpg",
-        "dsc" : "Centre Prouvé"
-    },
-    {
-        "x": 48.6860938,
-        "y": 6.1920457,
-        "url": "https://i.ibb.co/PhHMsLB/12.jpg",
-        "dsc" : "CHRU Nancy"
-    }
-]`
+    [
+       {
+           "x": 48.6829,
+           "y": 6.16106,
+           "url": "https://i.ibb.co/fMZJzMr/1.jpg",
+           "dsc" : "IUT Nancy-Charlemagne"
+       },
+       {
+           "x": 48.68559,
+           "y": 6.16104,
+           "url": "https://i.ibb.co/KL91YwV/2.jpg",
+           "dsc" : "Supermarché Match Laxou"
+       },
+       {
+           "x": 48.68891,
+           "y": 6.17493,
+           "url": "https://i.ibb.co/JjpVCFZ/3.jpg",
+           "dsc" : "Gare de Nancy"
+       },
+       {
+           "x": 48.6933734,
+           "y": 6.184289,
+           "url": "https://i.ibb.co/q59TQ23/4.jpg",
+           "dsc" : "Place Stanislas"
+       },
+       {
+           "x": 48.66634,
+           "y": 6.16687,
+           "url": "https://i.ibb.co/vBBwJdR/5.jpg",
+           "dsc" : "Vélodrome"
+       },
+       {
+           "x": 48.6907346,
+           "y": 6.174169,
+           "url": "https://i.ibb.co/zJKLw5Z/6.jpg",
+           "dsc" : "Tour Thiers"
+       },
+       {
+           "x": 48.6919326,
+           "y": 6.1862249,
+           "url": "https://i.ibb.co/dbtphyw/7.jpg",
+           "dsc" : "Cathédrale Notre-Dame-de-l'Annonciation de Nancy"
+       },
+       {
+           "x": 48.6802006,
+           "y": 6.1692646,
+           "url": "https://i.ibb.co/VHf1Bjr/8.jpg",
+           "dsc" : "Parc Sainte-Marie"
+       },
+       {
+           "x": 48.6891655,
+           "y": 6.1804276,
+           "url": "https://i.ibb.co/syBFRSF/9.jpg",
+           "dsc" : "Centre Commercial Saint Sébastien"
+       },
+       {
+           "x": 48.698987,
+           "y": 6.1841661,
+           "url": "https://i.ibb.co/DzGsCWM/10.jpg",
+           "dsc" : "La pépinière"
+       },
+       {
+           "x": 48.6886052,
+           "y": 6.1769114,
+           "url": "https://i.ibb.co/sFW24T1/11.jpg",
+           "dsc" : "Centre Prouvé"
+       },
+       {
+           "x": 48.6860938,
+           "y": 6.1920457,
+           "url": "https://i.ibb.co/PhHMsLB/12.jpg",
+           "dsc" : "CHRU Nancy"
+       }
+    ]
 
   ### getting the interface up and running
 
@@ -178,9 +174,9 @@ you can simply open `dist/index.html`
 
 or you can run a server locally by following these steps
 
-run `npm install` to get all the dependencies
++ run `npm install` to get all the dependencies
 
-run `npm run serve` to get a localhost server running
++ run `npm run serve` to get a localhost server running
 
 ## API docs
 
