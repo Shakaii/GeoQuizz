@@ -32,13 +32,15 @@ you can download a zip here with screenshots for all functionnalities (28mo) : h
 
 ## First Developpement's week demos
 
+these are developpment builds they are not representative of the final result.
+
 + `javascript's playable demo` <http://debaser.fr/geoquiz/1>
 + `vueJs's playable game` <http://debaser.fr/geoquiz/2>
 + `new features (difficulty, saves, etc...)` <http://debaser.fr/geoquiz/3>
 + `css upgrade` <http://debaser.fr/geoquiz/4>
 + `more upgrades` <http://debaser.fr/geoquiz/5>
 
-## Maquettes day 1
+## Day 1 sketches
 
 + `Homepage` <https://wireframe.cc/KIeWR5>
   
