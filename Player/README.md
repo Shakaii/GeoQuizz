@@ -174,7 +174,9 @@ If the database is already filled, you won't need to do this
 
 you can simply open `dist/index.html`
 
-or you can run a server locally by following these steps
+or go to http://debaser.fr/GeoQuizZ
+
+but the best is to run it locally by following these steps
 
 + run `npm install` to get all the dependencies
 
