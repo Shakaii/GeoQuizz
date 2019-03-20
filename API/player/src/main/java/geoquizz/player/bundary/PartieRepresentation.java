@@ -65,8 +65,8 @@ public class PartieRepresentation {
             p.setToken(UUID.randomUUID().toString());
             p.setSerie(s);
 
-            //recupere les photos à utiliser (les 10 premieres dans l'ordre aleatoire)
-            Set<Photo> photosRand = getPhotosRandom(s.getPhotos());
+            //recupere les photos à utiliser (les nb_photos premieres dans l'ordre aleatoire)
+            Set<Photo> photosRand = getPhotosRandom(s.getPhotos(),s.getNb_photos());
             for (Photo po : photosRand) {
                 po.addParties(p);
             }
@@ -99,17 +99,17 @@ public class PartieRepresentation {
 
     //randomize les photos d'une partie pour en renvoyer 10 maximum dans un ordre aleatoire
     //à l'aide de Collections.shuffle  (java.util)
-    public Set<Photo> getPhotosRandom(Set<Photo> photos){
+    public Set<Photo> getPhotosRandom(Set<Photo> photos, int nb_photos){
         //met en arrayList pour Collections.shuffle
         ArrayList<Photo> listPhotos = new ArrayList<Photo>();
         listPhotos.addAll(photos);
         Collections.shuffle(listPhotos);
         //recupere les 10 premieres photos pour le set à renvoyer      
-        if(listPhotos.size()<11){
+        if(listPhotos.size()<= nb_photos){
             return photos;
         }else{
             Set<Photo> photosRand = new HashSet<Photo>();   
-            for(int i=0;i<10;i++){
+            for(int i=0;i<nb_photos;i++){
                 photosRand.add(listPhotos.get(i));
             } 
             return photosRand;

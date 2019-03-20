@@ -19,7 +19,6 @@ public class Partie {
     private String joueur;
     private boolean saveScore; //true false
     private String ville;
-    private int nb_photos; //rm this later
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "serie_id", nullable = false)
@@ -38,10 +37,6 @@ public class Partie {
         this.joueur = joueur;
         this.status = 0;
     }
-
-    public int getNb_photos(){ return nb_photos;}
-
-    public void setNb_photos(int nb_photos){ this.nb_photos = nb_photos;}
 
     public String getId() {
         return id;
