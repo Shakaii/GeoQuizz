@@ -78,6 +78,8 @@ run `src/main/java.GeoQuizz/player/PlayerApplication.java`
 
 If the database is already filled, you won't need to do this
 
+If your api is running on localhost:8083 you can run this script instead : http://debaser.fr/GeoQuizZ/database.html it will do the following requests for you
+
 + Create a serie :
 
 `POST` to `http://localhost:8083/player/serie`
@@ -185,3 +187,8 @@ but the best is to run it locally by following these steps
 ## API docs
 
 Once the API is running simply go to `localhost:8083/swagger-ui.html` to see the docs
+
+here is a screenshot of the result.
+
+![screen api](https://cdn.discordapp.com/attachments/550768634398507018/557953761096499220/docu.PNG)
+les urls pour les séries sont les même que pour l'API back office. On pourrait donc les retirer mais c'est plus pratique de pouvoir tester le jeu avec une seule api.

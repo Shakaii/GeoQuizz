@@ -1,7 +1,10 @@
 ![logo](https://cdn.discordapp.com/attachments/554606011592343582/557866827485544448/GeoQuizZLarge.png)
 
+## Trello
 
-## Maquettes day 1
+https://trello.com/b/kw2pvLTp/geoquizz
+
+## Day 1 sketches
 
 + `Homepage` <https://wireframe.cc/KIeWR5>
   
@@ -36,4 +39,8 @@
 `mysql --password` (the password is admin)
     
 `create database geoquizz;`
+
+### Player
+
+For the player api and interface you'll find another readme with more details in the subfolder Player
    
