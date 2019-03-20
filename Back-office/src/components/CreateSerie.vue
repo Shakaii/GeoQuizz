@@ -8,7 +8,11 @@
         <div v-show="active == 0">
             <el-input placeholder="Nom/Ville de la serie" v-model="name" clearable>
             </el-input>
-            <el-button :disabled='name == ""' style="margin-top: 12px;" icon="el-icon-arrow-right" @click="next">Prochaine
+            <el-input placeholder="niveau de zoom" v-model="inputZoom" clearable>
+            </el-input>
+            <el-input placeholder="nombre de photo" v-model="inputNbPhotos" clearable>
+            </el-input>
+            <el-button :disabled='name == "" || inputZoom == "" || inputNbPhotos == ""' style="margin-top: 12px;" icon="el-icon-arrow-right" @click="next">Prochaine
                 étape</el-button>
         </div>
         <div v-show="active == 1">
@@ -54,7 +58,9 @@
                 lat: null,
                 lng: null,
                 imgUrl: "",
-                lastId: null
+                lastId: null,
+                inputZoom: "",
+                inputNbPhotos: ""
             }
         },
         components: {
@@ -80,8 +86,8 @@
                         dist: 3,
                         x: this.lat,
                         y: this.lng,
-                        nb_photos: 10,
-                        zoom: 10
+                        nb_photos: inputNbPhotos,
+                        zoom: inputZoom
                     }, {
                         headers: {
                             'Authorization': token
