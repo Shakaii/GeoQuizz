@@ -78,6 +78,8 @@ run `src/main/java.GeoQuizz/player/PlayerApplication.java`
 
 If the database is already filled, you won't need to do this
 
+If your api is running on localhost:8083 you can run this script instead : http://debaser.fr/GeoQuizZ/database.html it will do the following requests for you
+
 + Create a serie :
 
 `POST` to `http://localhost:8083/player/serie`
