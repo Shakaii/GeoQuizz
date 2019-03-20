@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Con from "./Con";
+import Con from "./Conn";
 export default {
     name: 'navbar',
     data() {
