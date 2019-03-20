@@ -1,6 +1,6 @@
 ![logo](https://cdn.discordapp.com/attachments/554606011592343582/557866827485544448/GeoQuizZLarge.png)
 
-## Demos du jeu
+## Démos du jeu pendant le développement
 
 + `démo jouable en pur javascript` <http://debaser.fr/geoquiz/1>
 + `jeu jouable en full vueJs` <http://debaser.fr/geoquiz/2>
@@ -8,7 +8,7 @@
 + `améliorations css` <http://debaser.fr/geoquiz/4>
 + `pré implémentation de l'api` <http://debaser.fr/geoquiz/5>
 
-## Maquettes
+## Maquettes day 1
 
 + `Homepage` <https://wireframe.cc/KIeWR5>
   
