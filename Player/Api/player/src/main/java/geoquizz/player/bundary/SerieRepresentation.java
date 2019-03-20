@@ -52,7 +52,7 @@ public class SerieRepresentation {
         return new ResponseEntity<>(saved, rH, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Permet d'ajouter la photo (présente dans le body de la requête) à la série dont l'id est renseignée.")
+    @ApiOperation(value = "(Sert uniquement si l'autre api est éteinte) Permet d'ajouter la photo (présente dans le body de la requête) à la série dont l'id est renseignée.")
     @PostMapping(value = "/serie/{id}/photos")
     public ResponseEntity<?> postPhotos(@RequestBody Photo[] photos, @PathVariable("id") String id) {
         Serie s = sr.findById(id).get();
