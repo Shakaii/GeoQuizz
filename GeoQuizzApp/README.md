@@ -4,6 +4,10 @@
 
 > L'application mobile GeoQuizz 
 
+## APi
+
+L'api utilisée pour l'application mobile est la même que pour le back office
+
 ## Télécharger l'apk
 
 http://debaser.fr/GeoQuizZ/GeoQuizZ.apk
