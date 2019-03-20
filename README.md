@@ -39,4 +39,8 @@ https://trello.com/b/kw2pvLTp/geoquizz
 `mysql --password` (the password is admin)
     
 `create database geoquizz;`
+
+### Player
+
+For the player api and interface you'll find another readme with more details in the subfolder Player
    
